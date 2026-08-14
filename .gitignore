@@ -1,0 +1,18 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+# Rider / Visual Studio
+.idea/
+.vs/
+*.user
+*.suo
+bin/
+obj/
+*.vsidx
+
+# Other common ones
+.env
+*.log
