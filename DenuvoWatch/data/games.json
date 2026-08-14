@@ -324,7 +324,7 @@
       }
     },
     {
-      "title": "FINAL FANTASY TACTICS - The Ivalice Chronicles",
+      "title": "ASY TACTICS - The Ivalice Chronicles",
       "sort_title": "final_fantasy_tactics_the_ivalice_chronicles",
       "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/1004640/988d2f00c81b45d6aab89e5a1737d0737165f905/library_600x900_2x.jpg",
       "game_info": {
@@ -547,7 +547,7 @@
     {
       "title": "Two Point Museum",
       "sort_title": "two_point_museum",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2185060/library_600x900_2x.jpg?t=1755540287",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2185060/library_600x900_2x.jpg",
       "game_info": {
         "appid": "2185060",
         "developer": "Two Point Studios",
@@ -1227,7 +1227,7 @@
     {
       "title": "Starlink: Battle for Atlas",
       "sort_title": "starlink_battle_for_atlas",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/950050/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/950050/portrait.png",
       "game_info": {
         "appid": "950050",
         "developer": "Ubisoft Toronto",
@@ -1312,7 +1312,7 @@
     {
       "title": "Rayman Legends Retold",
       "sort_title": "rayman_legends_retold",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4084710/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4084710/442a7a88ce56547b328c32a66b24f511f166f01e/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4084710",
         "developer": "Ubisoft Montpellier",
@@ -1329,7 +1329,7 @@
     {
       "title": "Phantom Blade Zero",
       "sort_title": "phantom_blade_zero",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4115450/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4115450/471e77854910665c03eb9a53ad06f2ac12903acd/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4115450",
         "developer": "S-GAME",
@@ -1346,7 +1346,7 @@
     {
       "title": "EA SPORTS FC 27",
       "sort_title": "ea_sports_fc_27",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4080220/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4080220/81210d536b70c14e4cf9725f3f03d82bf64e5e25/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4080220",
         "developer": "EA Vancouver",
@@ -1380,7 +1380,7 @@
     {
       "title": "ACE COMBAT 8: WINGS OF THEVE",
       "sort_title": "ace_combat_8_wings_of_theve",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2288340/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2288340/a1fb5685d2c140309d5549af1ddc725a7114d889/library_capsule_2x.jpg",
       "game_info": {
         "appid": "2288340",
         "developer": "Bandai Namco Studios",
@@ -1397,7 +1397,7 @@
     {
       "title": "STAR WARS: Galactic Racer",
       "sort_title": "star_wars_galactic_racer",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4078430/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4078430/16514821db6559e75c9067285fee5dd198492aee/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4078430",
         "developer": "Respawn Entertainment",
@@ -1414,7 +1414,7 @@
     {
       "title": "Planet Zoo 2",
       "sort_title": "planet_zoo_2",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3219030/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3219030/cc1d879275c41850ecd2e7296f314240e8cb768a/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3219030",
         "developer": "Frontier Developments",
@@ -1431,7 +1431,7 @@
     {
       "title": "FINAL FANTASY RESONANCE",
       "sort_title": "final_fantasy_resonance",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3259780/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3259780/21d8a7c692803448c79426fc88910d8658a058a8/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3259780",
         "developer": "Square Enix",
@@ -1448,7 +1448,7 @@
     {
       "title": "DRAGON QUEST MONSTERS: The Withered World",
       "sort_title": "dragon_quest_monsters_the_withered_world",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3681610/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3681610/aed89b216433c38969913b5fea00753bee95b8d7/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3681610",
         "developer": "Square Enix",
@@ -1465,7 +1465,7 @@
     {
       "title": "Tomb Raider: Legacy of Atlantis",
       "sort_title": "tomb_raider_legacy_of_atlantis",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3558670/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3558670/9da365c6dd7f21eff671a6c6854a680a6ac63f11/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3558670",
         "developer": "Crystal Dynamics",
@@ -1482,7 +1482,7 @@
     {
       "title": "Crazy Taxi: World Tour",
       "sort_title": "crazy_taxi_world_tour",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2924540/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2924540/5ebd7f9580e5b2f70b5ec0a57320bb9afff763bd/library_capsule_2x.jpg",
       "game_info": {
         "appid": "2924540",
         "developer": "SEGA",
@@ -1499,7 +1499,7 @@
     {
       "title": "Persona 6",
       "sort_title": "persona_6",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2649560/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2649560/54c775b46733158f4b419cde910c193636a8b6a5/library_capsule_2x.jpg",
       "game_info": {
         "appid": "2649560",
         "developer": "P-Studio",
@@ -1516,7 +1516,7 @@
     {
       "title": "Resident Evil Veronica",
       "sort_title": "resident_evil_veronica",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4824610/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4824610/249c95eeaf9a26ffc90b6a55f3eda7fc72b1545c/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4824610",
         "developer": "Capcom",
@@ -1533,7 +1533,7 @@
     {
       "title": "Warhammer 40,000: Chaos Gate – Deathwatch",
       "sort_title": "warhammer_40000_chaos_gate_deathwatch",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3010270/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3010270/5a6b6320fc594acdd6ac014edfd2925c584ad7b1/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3010270",
         "developer": "Complex Games",
@@ -1584,7 +1584,7 @@
     {
       "title": "STRANGER THAN HEAVEN",
       "sort_title": "stranger_than_heaven",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4260840/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/4260840/b0056b5de9974b7cb60ca7b73590567fdd182572/library_capsule_2x.jpg",
       "game_info": {
         "appid": "4260840",
         "developer": "Ryu Ga Gotoku Studio",
@@ -1601,7 +1601,7 @@
     {
       "title": "The Blood of Dawnwalker",
       "sort_title": "the_blood_of_dawnwalker",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3751260/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3751260/82769ab631e6e68b4a38bbba9fb5b74eb0d7db8d/library_capsule_2x.jpg",
       "game_info": {
         "appid": "3751260",
         "developer": "Rebel Wolves",
@@ -1618,7 +1618,7 @@
     {
       "title": "Persona 4 Revival",
       "sort_title": "persona_4_revival",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2963950/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/2963950/056cc71104978b202c5968ffb5003045c1931c95/library_capsule_2x.jpg",
       "game_info": {
         "appid": "2963950",
         "developer": "P-Studio",
@@ -1635,7 +1635,7 @@
     {
       "title": "Atomic Heart 2",
       "sort_title": "atomic_heart_2",
-      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3788800/library_600x900_2x.jpg",
+      "cover_url": "https://shared.steamstatic.com/store_item_assets/steam/apps/3788800/4857b65bf1f1951032ddf53375f7ea3820dc45a1/library_600x900_2x.jpg",
       "game_info": {
         "appid": "3788800",
         "developer": "Mundfish",
