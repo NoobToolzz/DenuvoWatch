@@ -15,7 +15,7 @@ Public Module GamesData
 
     ' Raw URL of the canonical games.json on GitHub (main branch).
     Private Const GamesJsonUrl As String =
-        "https://raw.githubusercontent.com/NoobToolzz/DenuvoWatch/refs/heads/main/data/games.json"
+        "https://raw.githubusercontent.com/NoobToolzz/DenuvoWatch/refs/heads/main/DenuvoWatch/data/games.json"
 
     ' Shared HttpClient instance - reused across calls to avoid socket exhaustion.
     Private ReadOnly client As New HttpClient()
