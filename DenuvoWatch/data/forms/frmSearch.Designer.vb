@@ -109,9 +109,9 @@ Partial Class frmSearch
         Label1.Size = New Size(49, 16)
         Label1.TabIndex = 6
         Label1.Text = "Query:"
-        ' 
+        '
         ' Form1
-        ' 
+        '
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control

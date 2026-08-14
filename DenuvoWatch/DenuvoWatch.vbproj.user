@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="data\forms\frmResults.vb">
+    <Compile Update="data\forms\frmExport.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="data\forms\frmExport.vb">
+    <Compile Update="data\forms\frmResults.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="data\forms\frmSearch.vb">

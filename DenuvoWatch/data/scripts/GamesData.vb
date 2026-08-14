@@ -12,7 +12,6 @@ Imports System.Text.Json.Serialization
 ' main FilterGames search used by the /search endpoint.
 ' =============================================================================
 Public Module GamesData
-
     ' Raw URL of the canonical games.json on GitHub (main branch).
     Private Const GamesJsonUrl As String =
         "https://raw.githubusercontent.com/NoobToolzz/DenuvoWatch/refs/heads/main/DenuvoWatch/data/games.json"
@@ -40,12 +39,12 @@ Public Module GamesData
             Dim json = client.GetStringAsync(GamesJsonUrl).Result
 
             Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            }
+                    .PropertyNameCaseInsensitive = True,
+                    .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                    }
 
-            Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
-            ' Fall back to an empty list when the JSON has no games array.
+            Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
+            ' If the JSON didn't have a games array for some reason, I just use an empty list
             AllGames = If(root?.Games, New List(Of GameItem)())
 
             Console.WriteLine($"Loaded {AllGames.Count} games")
@@ -124,7 +123,7 @@ Public Module GamesData
 
         Dim result = AllGames.AsEnumerable()
 
-        ' Free-text search across title and sort title.
+        ' If the user typed something, I check it against both the title and sort title
         If Not String.IsNullOrWhiteSpace(search) Then
             Dim term = search.Trim().ToLowerInvariant()
             result = result.Where(Function(g)
@@ -133,27 +132,41 @@ Public Module GamesData
             End Function)
         End If
 
-        ' Developer filter: comma-separated list -> OR match.
+        ' Developer filter — if they picked multiple, I split on comma and match any of them
         If Not String.IsNullOrWhiteSpace(developers) Then
             Dim list = developers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(d) String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(d) _
+                                            String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
         End If
 
-        ' Publisher filter: comma-separated list -> OR match.
+        ' Same deal for publishers
         If Not String.IsNullOrWhiteSpace(publishers) Then
             Dim list = publishers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(p) String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(p) _
+                                            String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
         End If
 
-        ' Scene group filter: comma-separated list -> OR match.
+        ' And same for scene groups
         If Not String.IsNullOrWhiteSpace(sceneGroups) Then
             Dim list = sceneGroups.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(s) _
+                                            String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
         End If
 
         Return result.ToList()
     End Function
-
 End Module
 
 ' =============================================================================
@@ -188,6 +201,9 @@ End Class
 
 ' General release metadata.
 Public Class GameInfo
+    <JsonPropertyName("appid")>
+    Public Property AppId As String
+
     <JsonPropertyName("developer")>
     Public Property Developer As String
 

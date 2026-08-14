@@ -37,23 +37,23 @@ Partial Class frmResults
         txtCrackStatus = New TextBox()
         lblCrackStatus = New Label()
         txtCrackDate = New TextBox()
-        lblCrackType = New Label()
         lblCrackDate = New Label()
-        txtCrackType = New TextBox()
         picGameCover = New PictureBox()
+        btnSteamPage = New Button()
         btnSave = New Button()
         btnReturn = New Button()
-        Button1 = New Button()
+        lblSearchFilters = New Label()
+        Label2 = New Label()
         grpGameInfo.SuspendLayout()
         grpCrackInfo.SuspendLayout()
         CType(picGameCover, ComponentModel.ISupportInitialize).BeginInit()
+        picGameCover.SuspendLayout()
         SuspendLayout()
         ' 
         ' lbGames
         ' 
         lbGames.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lbGames.FormattingEnabled = True
-        lbGames.Items.AddRange(New Object() {"Final Fantasy VII", "Harry Hogwart Butt Tickling School"})
         lbGames.Location = New Point(47, 81)
         lbGames.Margin = New Padding(4, 3, 4, 3)
         lbGames.Name = "lbGames"
@@ -64,7 +64,7 @@ Partial Class frmResults
         ' 
         lblGames.AutoSize = True
         lblGames.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblGames.Location = New Point(189, 22)
+        lblGames.Location = New Point(193, 22)
         lblGames.Margin = New Padding(4, 0, 4, 0)
         lblGames.Name = "lblGames"
         lblGames.Size = New Size(95, 36)
@@ -73,7 +73,6 @@ Partial Class frmResults
         ' 
         ' txtPublisher
         ' 
-        txtPublisher.Enabled = False
         txtPublisher.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         txtPublisher.Location = New Point(35, 58)
         txtPublisher.Margin = New Padding(4, 3, 4, 3)
@@ -106,7 +105,6 @@ Partial Class frmResults
         ' 
         ' txtDeveloper
         ' 
-        txtDeveloper.Enabled = False
         txtDeveloper.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         txtDeveloper.Location = New Point(35, 138)
         txtDeveloper.Margin = New Padding(4, 3, 4, 3)
@@ -119,7 +117,7 @@ Partial Class frmResults
         ' 
         lblSceneGroup.AutoSize = True
         lblSceneGroup.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblSceneGroup.Location = New Point(35, 196)
+        lblSceneGroup.Location = New Point(35, 194)
         lblSceneGroup.Margin = New Padding(4, 0, 4, 0)
         lblSceneGroup.Name = "lblSceneGroup"
         lblSceneGroup.Size = New Size(91, 14)
@@ -128,9 +126,8 @@ Partial Class frmResults
         ' 
         ' txtSceneGroup
         ' 
-        txtSceneGroup.Enabled = False
         txtSceneGroup.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtSceneGroup.Location = New Point(35, 219)
+        txtSceneGroup.Location = New Point(35, 217)
         txtSceneGroup.Margin = New Padding(4, 3, 4, 3)
         txtSceneGroup.Name = "txtSceneGroup"
         txtSceneGroup.ReadOnly = True
@@ -141,7 +138,7 @@ Partial Class frmResults
         ' 
         lblReleaseDate.AutoSize = True
         lblReleaseDate.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblReleaseDate.Location = New Point(35, 277)
+        lblReleaseDate.Location = New Point(35, 205)
         lblReleaseDate.Margin = New Padding(4, 0, 4, 0)
         lblReleaseDate.Name = "lblReleaseDate"
         lblReleaseDate.Size = New Size(98, 14)
@@ -150,9 +147,8 @@ Partial Class frmResults
         ' 
         ' txtReleaseDate
         ' 
-        txtReleaseDate.Enabled = False
         txtReleaseDate.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtReleaseDate.Location = New Point(35, 300)
+        txtReleaseDate.Location = New Point(35, 228)
         txtReleaseDate.Margin = New Padding(4, 3, 4, 3)
         txtReleaseDate.Name = "txtReleaseDate"
         txtReleaseDate.ReadOnly = True
@@ -167,13 +163,11 @@ Partial Class frmResults
         grpGameInfo.Controls.Add(lblReleaseDate)
         grpGameInfo.Controls.Add(lblDeveloper)
         grpGameInfo.Controls.Add(txtReleaseDate)
-        grpGameInfo.Controls.Add(txtSceneGroup)
-        grpGameInfo.Controls.Add(lblSceneGroup)
-        grpGameInfo.Location = New Point(507, 46)
+        grpGameInfo.Location = New Point(503, 91)
         grpGameInfo.Margin = New Padding(4, 3, 4, 3)
         grpGameInfo.Name = "grpGameInfo"
         grpGameInfo.Padding = New Padding(4, 3, 4, 3)
-        grpGameInfo.Size = New Size(371, 369)
+        grpGameInfo.Size = New Size(371, 285)
         grpGameInfo.TabIndex = 22
         grpGameInfo.TabStop = False
         grpGameInfo.Text = "Game Information"
@@ -183,10 +177,10 @@ Partial Class frmResults
         grpCrackInfo.Controls.Add(txtCrackStatus)
         grpCrackInfo.Controls.Add(lblCrackStatus)
         grpCrackInfo.Controls.Add(txtCrackDate)
-        grpCrackInfo.Controls.Add(lblCrackType)
         grpCrackInfo.Controls.Add(lblCrackDate)
-        grpCrackInfo.Controls.Add(txtCrackType)
-        grpCrackInfo.Location = New Point(507, 438)
+        grpCrackInfo.Controls.Add(lblSceneGroup)
+        grpCrackInfo.Controls.Add(txtSceneGroup)
+        grpCrackInfo.Location = New Point(503, 431)
         grpCrackInfo.Margin = New Padding(4, 3, 4, 3)
         grpCrackInfo.Name = "grpCrackInfo"
         grpCrackInfo.Padding = New Padding(4, 3, 4, 3)
@@ -197,7 +191,6 @@ Partial Class frmResults
         ' 
         ' txtCrackStatus
         ' 
-        txtCrackStatus.Enabled = False
         txtCrackStatus.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         txtCrackStatus.Location = New Point(35, 58)
         txtCrackStatus.Margin = New Padding(4, 3, 4, 3)
@@ -219,7 +212,6 @@ Partial Class frmResults
         ' 
         ' txtCrackDate
         ' 
-        txtCrackDate.Enabled = False
         txtCrackDate.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         txtCrackDate.Location = New Point(35, 138)
         txtCrackDate.Margin = New Padding(4, 3, 4, 3)
@@ -227,17 +219,6 @@ Partial Class frmResults
         txtCrackDate.ReadOnly = True
         txtCrackDate.Size = New Size(300, 29)
         txtCrackDate.TabIndex = 14
-        ' 
-        ' lblCrackType
-        ' 
-        lblCrackType.AutoSize = True
-        lblCrackType.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblCrackType.Location = New Point(35, 198)
-        lblCrackType.Margin = New Padding(4, 0, 4, 0)
-        lblCrackType.Name = "lblCrackType"
-        lblCrackType.Size = New Size(84, 14)
-        lblCrackType.TabIndex = 19
-        lblCrackType.Text = "Crack Type:"
         ' 
         ' lblCrackDate
         ' 
@@ -250,19 +231,9 @@ Partial Class frmResults
         lblCrackDate.TabIndex = 15
         lblCrackDate.Text = "Crack Date:"
         ' 
-        ' txtCrackType
-        ' 
-        txtCrackType.Enabled = False
-        txtCrackType.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtCrackType.Location = New Point(35, 221)
-        txtCrackType.Margin = New Padding(4, 3, 4, 3)
-        txtCrackType.Name = "txtCrackType"
-        txtCrackType.ReadOnly = True
-        txtCrackType.Size = New Size(300, 29)
-        txtCrackType.TabIndex = 18
-        ' 
         ' picGameCover
         ' 
+        picGameCover.Controls.Add(btnSteamPage)
         picGameCover.Location = New Point(916, 58)
         picGameCover.Margin = New Padding(4, 3, 4, 3)
         picGameCover.Name = "picGameCover"
@@ -270,6 +241,20 @@ Partial Class frmResults
         picGameCover.SizeMode = PictureBoxSizeMode.StretchImage
         picGameCover.TabIndex = 29
         picGameCover.TabStop = False
+        ' 
+        ' btnSteamPage
+        ' 
+        btnSteamPage.BackColor = Color.Transparent
+        btnSteamPage.FlatAppearance.BorderSize = 0
+        btnSteamPage.FlatStyle = FlatStyle.Flat
+        btnSteamPage.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnSteamPage.ForeColor = Color.Gray
+        btnSteamPage.Location = New Point(333, 0)
+        btnSteamPage.Name = "btnSteamPage"
+        btnSteamPage.Size = New Size(40, 37)
+        btnSteamPage.TabIndex = 32
+        btnSteamPage.Text = "🌐"
+        btnSteamPage.UseVisualStyleBackColor = False
         ' 
         ' btnSave
         ' 
@@ -293,22 +278,35 @@ Partial Class frmResults
         btnReturn.Text = "Return to Search"
         btnReturn.UseVisualStyleBackColor = True
         ' 
-        ' Button1
+        ' lblSearchFilters
         ' 
-        Button1.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Button1.Location = New Point(1249, 58)
-        Button1.Name = "Button1"
-        Button1.Size = New Size(40, 37)
-        Button1.TabIndex = 32
-        Button1.Text = "🌐"
-        Button1.UseVisualStyleBackColor = True
+        lblSearchFilters.AutoSize = True
+        lblSearchFilters.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        lblSearchFilters.Location = New Point(654, 58)
+        lblSearchFilters.Margin = New Padding(4, 0, 4, 0)
+        lblSearchFilters.Name = "lblSearchFilters"
+        lblSearchFilters.Size = New Size(42, 16)
+        lblSearchFilters.TabIndex = 32
+        lblSearchFilters.Text = "Games"
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label2.Location = New Point(563, 22)
+        Label2.Margin = New Padding(4, 0, 4, 0)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(239, 36)
+        Label2.TabIndex = 33
+        Label2.Text = "Search Results"
         ' 
         ' frmResults
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(1323, 832)
-        Controls.Add(Button1)
+        Controls.Add(Label2)
+        Controls.Add(lblSearchFilters)
         Controls.Add(btnReturn)
         Controls.Add(btnSave)
         Controls.Add(picGameCover)
@@ -318,12 +316,13 @@ Partial Class frmResults
         Controls.Add(lbGames)
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmResults"
-        Text = "Denuvo Watch: Game Status"
+        Text = "DenuvoWatch - Search Results"
         grpGameInfo.ResumeLayout(False)
         grpGameInfo.PerformLayout()
         grpCrackInfo.ResumeLayout(False)
         grpCrackInfo.PerformLayout()
         CType(picGameCover, ComponentModel.ISupportInitialize).EndInit()
+        picGameCover.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
 
@@ -344,11 +343,11 @@ Partial Class frmResults
     Friend WithEvents txtCrackStatus As TextBox
     Friend WithEvents lblCrackStatus As Label
     Friend WithEvents txtCrackDate As TextBox
-    Friend WithEvents lblCrackType As Label
     Friend WithEvents lblCrackDate As Label
-    Friend WithEvents txtCrackType As TextBox
     Friend WithEvents picGameCover As PictureBox
     Friend WithEvents btnSave As Button
     Friend WithEvents btnReturn As Button
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btnSteamPage As Button
+    Friend WithEvents lblSearchFilters As Label
+    Friend WithEvents Label2 As Label
 End Class

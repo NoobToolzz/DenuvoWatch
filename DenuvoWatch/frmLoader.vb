@@ -8,7 +8,6 @@
 ' after all retry attempts, a warning is shown first.
 ' =============================================================================
 Public Class frmLoader
-
     ' ---------------------------------------------------------------------------
     ' frmLoader_Load
     '   Kicks off the cover caching on a background Task so the UI thread
@@ -21,12 +20,12 @@ Public Class frmLoader
         Dim cacheTask = Task.Run(Function() CoverCache.RunCoverCaching(pgbLoader, lblStatus, failedCount))
 
         cacheTask.ContinueWith(Sub(t)
-                                   If Me.InvokeRequired Then
-                                       Me.Invoke(Sub() OnCachingComplete(failedCount))
-                                   Else
-                                       OnCachingComplete(failedCount)
-                                   End If
-                               End Sub)
+            If Me.InvokeRequired Then
+                Me.Invoke(Sub() OnCachingComplete(failedCount))
+            Else
+                OnCachingComplete(failedCount)
+            End If
+        End Sub)
     End Sub
 
     ' ---------------------------------------------------------------------------
@@ -43,7 +42,9 @@ Public Class frmLoader
                             MessageBoxIcon.Warning)
         End If
 
+        ' Now that the data is loaded and covers are cached, start the local API server
+        StartWebServer()
+
         NavigateTo(Me, Function() New frmSearch())
     End Sub
-
 End Class
