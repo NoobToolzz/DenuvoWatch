@@ -314,6 +314,7 @@ Partial Class frmResults
         Controls.Add(grpGameInfo)
         Controls.Add(lblGames)
         Controls.Add(lbGames)
+        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmResults"
         Text = "DenuvoWatch - Search Results"

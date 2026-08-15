@@ -138,6 +138,7 @@ Partial Class frmSearch
         Controls.Add(tbQuery)
         Controls.Add(btnSearch)
         Controls.Add(lblTitle)
+        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmSearch"
         Text = "DenuvoWatch - Search"

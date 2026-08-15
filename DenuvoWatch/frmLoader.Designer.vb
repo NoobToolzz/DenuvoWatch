@@ -50,6 +50,7 @@ Partial Class frmLoader
         Controls.Add(lblStatus)
         Controls.Add(pgbLoader)
         Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
         Name = "frmLoader"
         Text = "DenuvoWatch - Loader"
         ResumeLayout(False)
