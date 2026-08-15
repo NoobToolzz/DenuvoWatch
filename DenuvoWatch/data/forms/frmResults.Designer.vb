@@ -40,7 +40,7 @@ Partial Class frmResults
         lblCrackDate = New Label()
         picGameCover = New PictureBox()
         btnSteamPage = New Button()
-        btnSave = New Button()
+        btnProceedToExport = New Button()
         btnReturn = New Button()
         lblSearchFilters = New Label()
         Label2 = New Label()
@@ -257,16 +257,16 @@ Partial Class frmResults
         btnSteamPage.Text = "🌐"
         btnSteamPage.UseVisualStyleBackColor = False
         ' 
-        ' btnSave
+        ' btnProceedToExport
         ' 
-        btnSave.Font = New Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        btnSave.Location = New Point(997, 646)
-        btnSave.Margin = New Padding(4, 3, 4, 3)
-        btnSave.Name = "btnSave"
-        btnSave.Size = New Size(208, 57)
-        btnSave.TabIndex = 30
-        btnSave.Text = "Save as CSV"
-        btnSave.UseVisualStyleBackColor = True
+        btnProceedToExport.Font = New Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        btnProceedToExport.Location = New Point(997, 646)
+        btnProceedToExport.Margin = New Padding(4, 3, 4, 3)
+        btnProceedToExport.Name = "btnProceedToExport"
+        btnProceedToExport.Size = New Size(208, 57)
+        btnProceedToExport.TabIndex = 30
+        btnProceedToExport.Text = "Proceed to Export"
+        btnProceedToExport.UseVisualStyleBackColor = True
         ' 
         ' btnReturn
         ' 
@@ -308,7 +308,7 @@ Partial Class frmResults
         Controls.Add(Label2)
         Controls.Add(lblSearchFilters)
         Controls.Add(btnReturn)
-        Controls.Add(btnSave)
+        Controls.Add(btnProceedToExport)
         Controls.Add(picGameCover)
         Controls.Add(grpCrackInfo)
         Controls.Add(grpGameInfo)
@@ -344,7 +344,7 @@ Partial Class frmResults
     Friend WithEvents txtCrackDate As TextBox
     Friend WithEvents lblCrackDate As Label
     Friend WithEvents picGameCover As PictureBox
-    Friend WithEvents btnSave As Button
+    Friend WithEvents btnProceedToExport As Button
     Friend WithEvents btnReturn As Button
     Friend WithEvents btnSteamPage As Button
     Friend WithEvents lblSearchFilters As Label
