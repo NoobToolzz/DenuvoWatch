@@ -35,12 +35,12 @@ Partial Class frmLoader
         ' 
         ' lblStatus
         ' 
-        lblStatus.AutoSize = True
         lblStatus.Location = New Point(12, 9)
         lblStatus.Name = "lblStatus"
-        lblStatus.Size = New Size(112, 16)
+        lblStatus.Size = New Size(495, 16)
         lblStatus.TabIndex = 1
         lblStatus.Text = "Initializing..."
+        lblStatus.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' frmLoader
         ' 
@@ -53,7 +53,6 @@ Partial Class frmLoader
         Name = "frmLoader"
         Text = "DenuvoWatch - Loader"
         ResumeLayout(False)
-        PerformLayout()
     End Sub
     Friend WithEvents pgbLoader As ProgressBar
     Friend WithEvents lblStatus As Label

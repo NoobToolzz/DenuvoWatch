@@ -22,6 +22,7 @@ Partial Class frmSearch
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         lblTitle = New Label()
         cbPublisher = New ComboBox()
         cbDeveloper = New ComboBox()
@@ -30,21 +31,21 @@ Partial Class frmSearch
         tbQuery = New TextBox()
         Label1 = New Label()
         gbFilters = New GroupBox()
-        toolTipFilters = New System.Windows.Forms.ToolTip()
+        toolTipFilters = New ToolTip(components)
         gbFilters.SuspendLayout()
         SuspendLayout()
         ' 
         ' lblTitle
         ' 
-        lblTitle.AutoSize = True
         lblTitle.BackColor = SystemColors.Control
         lblTitle.Font = New Font("JetBrains Mono", 21.75F, FontStyle.Bold Or FontStyle.Underline, GraphicsUnit.Point, CByte(0))
-        lblTitle.Location = New Point(209, 18)
+        lblTitle.Location = New Point(13, 9)
         lblTitle.Margin = New Padding(4, 0, 4, 0)
         lblTitle.Name = "lblTitle"
-        lblTitle.Size = New Size(204, 39)
+        lblTitle.Size = New Size(584, 39)
         lblTitle.TabIndex = 0
         lblTitle.Text = "DenuvoWatch"
+        lblTitle.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' cbPublisher
         ' 
@@ -85,7 +86,7 @@ Partial Class frmSearch
         ' btnSearch
         ' 
         btnSearch.Font = New Font("JetBrains Mono", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        btnSearch.Location = New Point(350, 240)
+        btnSearch.Location = New Point(352, 179)
         btnSearch.Margin = New Padding(4, 3, 4, 3)
         btnSearch.Name = "btnSearch"
         btnSearch.Size = New Size(208, 57)
@@ -96,18 +97,18 @@ Partial Class frmSearch
         ' tbQuery
         ' 
         tbQuery.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        tbQuery.Location = New Point(103, 122)
+        tbQuery.Location = New Point(106, 70)
         tbQuery.Margin = New Padding(4, 3, 4, 3)
         tbQuery.Name = "tbQuery"
+        tbQuery.PlaceholderText = "Enter a search query / AppID"
         tbQuery.Size = New Size(464, 23)
         tbQuery.TabIndex = 5
-        tbQuery.PlaceholderText = "Enter a search query / AppID"
         ' 
         ' Label1
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label1.Location = New Point(36, 127)
+        Label1.Location = New Point(39, 75)
         Label1.Margin = New Padding(4, 0, 4, 0)
         Label1.Name = "Label1"
         Label1.Size = New Size(49, 16)
@@ -119,7 +120,7 @@ Partial Class frmSearch
         gbFilters.Controls.Add(cbPublisher)
         gbFilters.Controls.Add(cbDeveloper)
         gbFilters.Controls.Add(cbSceneGroup)
-        gbFilters.Location = New Point(36, 162)
+        gbFilters.Location = New Point(39, 110)
         gbFilters.Name = "gbFilters"
         gbFilters.Size = New Size(267, 187)
         gbFilters.TabIndex = 7
@@ -131,7 +132,7 @@ Partial Class frmSearch
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control
-        ClientSize = New Size(610, 377)
+        ClientSize = New Size(610, 320)
         Controls.Add(gbFilters)
         Controls.Add(Label1)
         Controls.Add(tbQuery)

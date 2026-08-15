@@ -62,14 +62,15 @@ Partial Class frmResults
         ' 
         ' lblGames
         ' 
-        lblGames.AutoSize = True
         lblGames.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblGames.Location = New Point(193, 22)
+        lblGames.ImageAlign = ContentAlignment.MiddleRight
+        lblGames.Location = New Point(47, 42)
         lblGames.Margin = New Padding(4, 0, 4, 0)
         lblGames.Name = "lblGames"
-        lblGames.Size = New Size(95, 36)
+        lblGames.Size = New Size(408, 36)
         lblGames.TabIndex = 8
         lblGames.Text = "Games"
+        lblGames.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' txtPublisher
         ' 
@@ -281,24 +282,23 @@ Partial Class frmResults
         ' lblSearchFilters
         ' 
         lblSearchFilters.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblSearchFilters.Location = New Point(570, 58)
+        lblSearchFilters.Location = New Point(503, 58)
         lblSearchFilters.Margin = New Padding(4, 0, 4, 0)
         lblSearchFilters.Name = "lblSearchFilters"
-        lblSearchFilters.Size = New Size(239, 16)
+        lblSearchFilters.Size = New Size(371, 16)
         lblSearchFilters.TabIndex = 32
-        lblSearchFilters.Text = "Games"
         lblSearchFilters.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label2
         ' 
-        Label2.AutoSize = True
-        Label2.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.Location = New Point(570, 22)
+        Label2.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold Or FontStyle.Underline)
+        Label2.Location = New Point(503, 22)
         Label2.Margin = New Padding(4, 0, 4, 0)
         Label2.Name = "Label2"
-        Label2.Size = New Size(239, 36)
+        Label2.Size = New Size(371, 36)
         Label2.TabIndex = 33
         Label2.Text = "Search Results"
+        Label2.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' frmResults
         ' 
@@ -324,7 +324,6 @@ Partial Class frmResults
         CType(picGameCover, ComponentModel.ISupportInitialize).EndInit()
         picGameCover.ResumeLayout(False)
         ResumeLayout(False)
-        PerformLayout()
 
     End Sub
 

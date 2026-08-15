@@ -161,11 +161,11 @@ Public Class frmSearch
     ' ---------------------------------------------------------------------------
     Private Sub NavigateToResults(json As String, filterDisplay As String)
         NavigateTo(Me, Function()
-            Dim results As New frmResults()
-            results.ResultsJson = json
-            results.SearchFilters = filterDisplay
-            Return results
-        End Function)
+                           Dim results As New frmResults()
+                           results.ResultsJson = json
+                           results.SearchFilters = filterDisplay
+                           Return results
+                       End Function)
     End Sub
 
     ' ---------------------------------------------------------------------------
