@@ -19,6 +19,7 @@
 Public Class MultiSelectCombo
     Private ReadOnly combo As ComboBox
     Private ReadOnly ownerForm As Form
+    Private ReadOnly placeholderText As String
 
     ' ToolStripDropDown hosts the CheckedListBox without stealing focus.
     Private ReadOnly dropdown As ToolStripDropDown
@@ -30,11 +31,14 @@ Public Class MultiSelectCombo
 
     ' ---------------------------------------------------------------------------
     ' Constructor
-    '   Wires up the popup behaviour on the given ComboBox.
+    '   Wires up the popup behaviour on the given ComboBox. Grabs the combo's
+    '   current text as the placeholder so I can restore it when everything
+    '   gets unchecked.
     ' ---------------------------------------------------------------------------
     Public Sub New(combo As ComboBox, ownerForm As Form)
         Me.combo = combo
         Me.ownerForm = ownerForm
+        Me.placeholderText = combo.Text
 
         ' I shrink the built-in dropdown to basically nothing so it doesn't flash on screen
         combo.DropDownHeight = 1
@@ -117,9 +121,12 @@ Public Class MultiSelectCombo
     ' ---------------------------------------------------------------------------
     ' UpdateComboText
     '   Sets the ComboBox.Text to the display string of checked items.
+    '   If nothing is checked, I put the placeholder back so the combo
+    '   doesn't look empty and confusing.
     ' ---------------------------------------------------------------------------
     Private Sub UpdateComboText()
-        combo.Text = GetCheckedItemsDisplay()
+        Dim display = GetCheckedItemsDisplay()
+        combo.Text = If(String.IsNullOrEmpty(display), placeholderText, display)
     End Sub
 
     ' ---------------------------------------------------------------------------
@@ -152,13 +159,13 @@ Public Class MultiSelectCombo
 
     ' ---------------------------------------------------------------------------
     ' Reset
-    '   Unchecks all items and clears the ComboBox text.
+    '   Unchecks all items and restores the ComboBox placeholder text.
     ' ---------------------------------------------------------------------------
     Public Sub Reset()
         For i = 0 To checkedList.Items.Count - 1
             checkedList.SetItemChecked(i, False)
         Next
-        combo.Text = ""
+        combo.Text = placeholderText
     End Sub
 
     ' ---------------------------------------------------------------------------
