@@ -29,6 +29,9 @@ Partial Class frmSearch
         btnSearch = New Button()
         tbQuery = New TextBox()
         Label1 = New Label()
+        gbFilters = New GroupBox()
+        toolTipFilters = New System.Windows.Forms.ToolTip()
+        gbFilters.SuspendLayout()
         SuspendLayout()
         ' 
         ' lblTitle
@@ -48,7 +51,7 @@ Partial Class frmSearch
         cbPublisher.BackColor = SystemColors.ButtonFace
         cbPublisher.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         cbPublisher.FormattingEnabled = True
-        cbPublisher.Location = New Point(54, 198)
+        cbPublisher.Location = New Point(20, 31)
         cbPublisher.Margin = New Padding(4, 3, 4, 3)
         cbPublisher.Name = "cbPublisher"
         cbPublisher.Size = New Size(229, 24)
@@ -60,7 +63,7 @@ Partial Class frmSearch
         cbDeveloper.BackColor = SystemColors.ButtonFace
         cbDeveloper.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         cbDeveloper.FormattingEnabled = True
-        cbDeveloper.Location = New Point(54, 255)
+        cbDeveloper.Location = New Point(20, 88)
         cbDeveloper.Margin = New Padding(4, 3, 4, 3)
         cbDeveloper.Name = "cbDeveloper"
         cbDeveloper.Size = New Size(229, 24)
@@ -72,7 +75,7 @@ Partial Class frmSearch
         cbSceneGroup.BackColor = SystemColors.ButtonFace
         cbSceneGroup.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         cbSceneGroup.FormattingEnabled = True
-        cbSceneGroup.Location = New Point(54, 310)
+        cbSceneGroup.Location = New Point(20, 143)
         cbSceneGroup.Margin = New Padding(4, 3, 4, 3)
         cbSceneGroup.Name = "cbSceneGroup"
         cbSceneGroup.Size = New Size(229, 24)
@@ -98,6 +101,7 @@ Partial Class frmSearch
         tbQuery.Name = "tbQuery"
         tbQuery.Size = New Size(464, 23)
         tbQuery.TabIndex = 5
+        tbQuery.PlaceholderText = "Enter a search query / AppID"
         ' 
         ' Label1
         ' 
@@ -109,23 +113,34 @@ Partial Class frmSearch
         Label1.Size = New Size(49, 16)
         Label1.TabIndex = 6
         Label1.Text = "Query:"
-        '
-        ' Form1
-        '
+        ' 
+        ' gbFilters
+        ' 
+        gbFilters.Controls.Add(cbPublisher)
+        gbFilters.Controls.Add(cbDeveloper)
+        gbFilters.Controls.Add(cbSceneGroup)
+        gbFilters.Location = New Point(36, 162)
+        gbFilters.Name = "gbFilters"
+        gbFilters.Size = New Size(267, 187)
+        gbFilters.TabIndex = 7
+        gbFilters.TabStop = False
+        gbFilters.Text = "Filters"
+        ' 
+        ' frmSearch
+        ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control
         ClientSize = New Size(610, 377)
+        Controls.Add(gbFilters)
         Controls.Add(Label1)
         Controls.Add(tbQuery)
         Controls.Add(btnSearch)
-        Controls.Add(cbSceneGroup)
-        Controls.Add(cbDeveloper)
-        Controls.Add(cbPublisher)
         Controls.Add(lblTitle)
         Margin = New Padding(4, 3, 4, 3)
-        Name = "Form1"
-        Text = "Denuvo Watch"
+        Name = "frmSearch"
+        Text = "DenuvoWatch - Search"
+        gbFilters.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
 
@@ -138,4 +153,6 @@ Partial Class frmSearch
     Friend WithEvents btnSearch As Button
     Friend WithEvents tbQuery As TextBox
     Friend WithEvents Label1 As Label
+    Friend WithEvents gbFilters As GroupBox
+    Friend WithEvents toolTipFilters As System.Windows.Forms.ToolTip
 End Class
