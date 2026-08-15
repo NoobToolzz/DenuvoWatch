@@ -102,19 +102,19 @@ Public Module GamesData
     ' ---------------------------------------------------------------------------
     ' FilterGames
     '   Applies the four optional filters to AllGames and returns the matching
-    '   subset as a new list. Every filter is AND-combined; within the
-    '   developer / publisher / scene-group filters a comma-separated string
-    '   is treated as an OR of the individual values.
+    '   subset as a new list. The search term uses fuzzy matching — I strip
+    '   out special characters from both the search term and the title before
+    '   comparing, so "resident evil 4" matches "Resident Evil: 4" etc.
     '
     ' Parameters:
-    '   search      - substring matched against Title or SortTitle (case-ins.)
+    '   search      - fuzzy text matched against Title or SortTitle (case-ins.)
     '   developers  - comma-separated developer names (OR), or blank for all
     '   publishers   - comma-separated publisher names (OR), or blank for all
     '   sceneGroups - comma-separated scene group names (OR), or blank for all
     '
     ' Example:
-    '   FilterGames("cyberpunk", "CD Projekt Red", "", "")
-    '   -> games whose title contains "cyberpunk" by CD Projekt Red
+    '   FilterGames("resident evil 4", "", "", "")
+    '   -> matches "Resident Evil 4" even though the query lacks the special chars
     ' ---------------------------------------------------------------------------
     Public Function FilterGames(search As String,
                                 developers As String,
@@ -123,49 +123,68 @@ Public Module GamesData
 
         Dim result = AllGames.AsEnumerable()
 
-        ' If the user typed something, I check it against both the title and sort title
+        ' If the user typed something, I do a fuzzy match against title and sort title
         If Not String.IsNullOrWhiteSpace(search) Then
-            Dim term = search.Trim().ToLowerInvariant()
+            Dim normalizedTerm = NormalizeForSearch(search)
             result = result.Where(Function(g)
-                Return (g.Title IsNot Nothing AndAlso g.Title.ToLowerInvariant().Contains(term)) OrElse
-                       (g.SortTitle IsNot Nothing AndAlso g.SortTitle.ToLowerInvariant().Contains(term))
+                Dim normTitle = NormalizeForSearch(If(g.Title, ""))
+                Dim normSort = NormalizeForSearch(If(g.SortTitle, ""))
+                Return normTitle.Contains(normalizedTerm) OrElse normSort.Contains(normalizedTerm)
             End Function)
         End If
 
         ' Developer filter — if they picked multiple, I split on comma and match any of them
         If Not String.IsNullOrWhiteSpace(developers) Then
             Dim list = developers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(d) _
-                                            String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(Function(g) list.Any(Function(d) String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
         End If
 
         ' Same deal for publishers
         If Not String.IsNullOrWhiteSpace(publishers) Then
             Dim list = publishers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(p) _
-                                            String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(Function(g) list.Any(Function(p) String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
         End If
 
         ' And same for scene groups
         If Not String.IsNullOrWhiteSpace(sceneGroups) Then
             Dim list = sceneGroups.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(s) _
-                                            String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(Function(g) list.Any(Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
         End If
 
         Return result.ToList()
+    End Function
+
+    ' ---------------------------------------------------------------------------
+    ' FilterByAppId
+    '   Returns games whose Steam appid matches the given value. This is a
+    '   straight equality check on GameInfo.AppId — no fuzzy matching needed
+    '   since appids are just numbers.
+    '
+    ' Example:
+    '   FilterByAppId("2244210") -> the single game with that appid (if it exists)
+    ' ---------------------------------------------------------------------------
+    Public Function FilterByAppId(appId As String) As List(Of GameItem)
+        Dim id = appId.Trim()
+        Return AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
+    End Function
+
+    ' ---------------------------------------------------------------------------
+    ' NormalizeForSearch
+    '   Strips out anything that isn't a letter, number, or space, converts to
+    '   lowercase, and collapses extra whitespace. This lets me do fuzzy
+    '   matching so "resident evil 4" matches "Resident Evil: 4" — the colon
+    '   and any other special chars just get thrown away before comparing.
+    ' ---------------------------------------------------------------------------
+    Private Function NormalizeForSearch(s As String) As String
+        If String.IsNullOrWhiteSpace(s) Then Return ""
+        Dim sb As New Text.StringBuilder()
+        For Each c In s.ToLowerInvariant()
+            If Char.IsLetterOrDigit(c) OrElse c = " "c Then
+                sb.Append(c)
+            End If
+        Next
+        ' Collapse multiple spaces into one so spacing differences don't matter
+        Return System.Text.RegularExpressions.Regex.Replace(sb.ToString(), "\s+", " ").Trim()
     End Function
 End Module
 

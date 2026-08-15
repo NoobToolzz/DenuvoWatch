@@ -59,29 +59,37 @@ Public Module WebServer
 
     ' ---------------------------------------------------------------------------
     ' HandleSearch
-    '   Reads the four optional query-string filters, calls GamesData.FilterGames,
-    '   and serialises the results to JSON in the same shape as games.json.
+    '   Reads the query-string filters. If "appid" is present, I search by
+    '   appid only and ignore everything else. Otherwise I do a normal
+    '   fuzzy text + filter search.
     '
     ' Query parameters:
-    '   q           – free-text search (matched against title / sort_title)
+    '   appid       – Steam appid (1-7 digits), takes priority over everything
+    '   q           – fuzzy text search (matched against title / sort_title)
     '   developer   – comma-separated developer names (OR match)
     '   publisher   – comma-separated publisher names (OR match)
     '   scene_group – comma-separated scene group names (OR match)
     ' ---------------------------------------------------------------------------
     Private Function HandleSearch(ctx As HttpContext) As IResult
-        Dim query = ctx.Request.Query("q").ToString()
-        Dim developer = ctx.Request.Query("developer").ToString()
-        Dim publisher = ctx.Request.Query("publisher").ToString()
-        Dim sceneGroup = ctx.Request.Query("scene_group").ToString()
+        Dim appid = ctx.Request.Query("appid").ToString()
 
-        Dim games = FilterGames(query, developer, publisher, sceneGroup)
+        Dim games As List(Of GameItem)
+
+        ' If an appid was provided, I search only by that — ignore all other filters
+        If Not String.IsNullOrWhiteSpace(appid) Then
+            games = GamesData.FilterByAppId(appid)
+        Else
+            Dim query = ctx.Request.Query("q").ToString()
+            Dim developer = ctx.Request.Query("developer").ToString()
+            Dim publisher = ctx.Request.Query("publisher").ToString()
+            Dim sceneGroup = ctx.Request.Query("scene_group").ToString()
+            games = GamesData.FilterGames(query, developer, publisher, sceneGroup)
+        End If
 
         ' Wrap it up in the same { "games": [...] } shape as the original games.json
-        Dim resultObj As 
-         New
-        With {.games = games}
-            Dim json = JsonSerializer.Serialize(resultObj, jsonOpts)
+        Dim resultObj As New With {.games = games}
+        Dim json = JsonSerializer.Serialize(resultObj, jsonOpts)
 
-            Return Results.Content(json, "application/json")
-                End Function
+        Return Results.Content(json, "application/json")
+    End Function
 End Module
