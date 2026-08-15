@@ -56,17 +56,26 @@ jobs:
         if: matrix.configuration == 'Release' && startsWith(github.ref, 'refs/tags/v')
         run: |
           $publishDir = "publish"
-          dotnet publish $env:Project_Path -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:PublishTrimmed=false -p:Version=${{ steps.version.outputs.version }} -o $publishDir
+          dotnet publish $env:Project_Path -c Release -o $publishDir -p:Version=${{ steps.version.outputs.version }}
 
-          # Create a zip with only the necessary runtime files
+          # The files land directly in publish\ for framework-dependent builds
           $zipPath = "DenuvoWatch-${{ steps.version.outputs.version }}.zip"
           $files = @(
             "$publishDir\DenuvoWatch.exe",
             "$publishDir\DenuvoWatch.dll",
             "$publishDir\DenuvoWatch.runtimeconfig.json"
           )
-          Compress-Archive -Path $files -DestinationPath $zipPath
 
+          # Verify the files exist before zipping
+          foreach ($f in $files) {
+            if (-not (Test-Path $f)) {
+              Write-Error "Missing: $f"
+              Get-ChildItem $publishDir -Recurse | Select-Object FullName
+              exit 1
+            }
+          }
+
+          Compress-Archive -Path $files -DestinationPath $zipPath
           Write-Host "Created $zipPath"
 
       - name: Upload build artifacts
