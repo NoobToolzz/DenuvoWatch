@@ -1,22 +1,10 @@
-﻿' =============================================================================
-' Class: frmLoader
-' -----------------------------------------------------------------------------
-' Splash-style form shown at startup. Runs the cover-caching process on a
-' background thread (CoverCache.RunCoverCaching) which verifies and downloads
-' game cover images, reporting live progress to pgbLoader and lblStatus.
-' Once caching completes, transitions to frmSearch. If any covers failed
-' after all retry attempts, a warning is shown first.
-' =============================================================================
+﻿' frmLoader — downloads cover images then sends you to the search form.
 Public Class frmLoader
-    ' ---------------------------------------------------------------------------
-    ' frmLoader_Load
-    '   Kicks off the cover caching on a background Task so the UI thread
-    '   stays responsive. When the task finishes, marshals back to the UI
-    '   thread to show a warning (if needed) and transition to frmSearch.
-    ' ---------------------------------------------------------------------------
+    ' I run the caching on a background thread so the UI doesn't freeze
     Private Sub frmLoader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim failedCount As Integer = 0
+        StyleFormButtons(Me)
 
+        Dim failedCount As Integer = 0
         Dim cacheTask = Task.Run(Function() CoverCache.RunCoverCaching(pgbLoader, lblStatus, failedCount))
 
         cacheTask.ContinueWith(Sub(t)
@@ -28,23 +16,14 @@ Public Class frmLoader
         End Sub)
     End Sub
 
-    ' ---------------------------------------------------------------------------
-    ' OnCachingComplete
-    '   Called on the UI thread after the background caching finishes. If any
-    '   covers failed, shows a warning MessageBox before navigating to frmSearch.
-    ' ---------------------------------------------------------------------------
+    ' Caching's done — warn if anything failed, then off you go
     Private Sub OnCachingComplete(failedCount As Integer)
         If failedCount > 0 Then
-            MessageBox.Show($"{failedCount} image(s) failed to download after 3 attempts." & vbCrLf &
-                            "Their covers may be missing.",
-                            "Cover Download Warning",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning)
+            MessageBox.Show($"{failedCount} image(s) failed to download after 3 attempts.{vbCrLf}Their covers may be missing.",
+                            "Cover Download Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
-        ' Now that the data is loaded and covers are cached, start the local API server
         StartWebServer()
-
         NavigateTo(Me, Function() New frmSearch())
     End Sub
 End Class
