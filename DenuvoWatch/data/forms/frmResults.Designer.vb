@@ -44,6 +44,7 @@ Partial Class frmResults
         btnReturn = New Button()
         lblSearchFilters = New Label()
         Label2 = New Label()
+        txtGameSearch = New TextBox()
         grpGameInfo.SuspendLayout()
         grpCrackInfo.SuspendLayout()
         CType(picGameCover, ComponentModel.ISupportInitialize).BeginInit()
@@ -54,6 +55,7 @@ Partial Class frmResults
         ' 
         lbGames.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lbGames.FormattingEnabled = True
+        lbGames.DrawMode = DrawMode.OwnerDrawFixed
         lbGames.Location = New Point(47, 81)
         lbGames.Margin = New Padding(4, 3, 4, 3)
         lbGames.Name = "lbGames"
@@ -299,7 +301,17 @@ Partial Class frmResults
         Label2.TabIndex = 33
         Label2.Text = "Search Results"
         Label2.TextAlign = ContentAlignment.MiddleCenter
-        ' 
+        '
+        ' txtGameSearch
+        '
+        txtGameSearch.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        txtGameSearch.Location = New Point(47, 776)
+        txtGameSearch.Margin = New Padding(4, 3, 4, 3)
+        txtGameSearch.Name = "txtGameSearch"
+        txtGameSearch.PlaceholderText = "Search results..."
+        txtGameSearch.Size = New Size(408, 23)
+        txtGameSearch.TabIndex = 34
+        '
         ' frmResults
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -314,6 +326,7 @@ Partial Class frmResults
         Controls.Add(grpGameInfo)
         Controls.Add(lblGames)
         Controls.Add(lbGames)
+        Controls.Add(txtGameSearch)
         Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmResults"
@@ -350,4 +363,5 @@ Partial Class frmResults
     Friend WithEvents btnSteamPage As Button
     Friend WithEvents lblSearchFilters As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents txtGameSearch As TextBox
 End Class
