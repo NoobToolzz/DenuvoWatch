@@ -3,65 +3,37 @@ Imports System.Net.Http
 Imports System.Text.Json
 Imports System.Text.Json.Serialization
 
-' =============================================================================
-' Module: GamesData
-' -----------------------------------------------------------------------------
-' In-memory game catalogue backed by a remote games.json hosted on GitHub.
-' Fetches the raw JSON at startup into AllGames and exposes helper queries for
-' the unique filter values (developers, publishers, scene groups) plus the
-' main FilterGames search used by the /search endpoint.
-' =============================================================================
+' GamesData — holds all the games we loaded from the JSON on GitHub.
 Public Module GamesData
-    ' Raw URL of the canonical games.json on GitHub (main branch).
     Private Const GamesJsonUrl As String =
         "https://raw.githubusercontent.com/NoobToolzz/DenuvoWatch/refs/heads/main/DenuvoWatch/data/games.json"
 
-    ' Shared HttpClient instance - reused across calls to avoid socket exhaustion.
     Private ReadOnly client As New HttpClient()
 
-    ' The full loaded game collection; empty list until LoadGames is called.
     Public Property AllGames As List(Of GameItem) = New List(Of GameItem)()
 
-    ' ---------------------------------------------------------------------------
-    ' LoadGames
-    '   Fetches games.json from the remote GitHub raw URL, deserialises it
-    '   into AllGames, and logs a summary line. On any failure AllGames is
-    '   left unchanged and the error is written to the console.
-    '
-    ' JSON options:
-    '   - PropertyNameCaseInsensitive = True   (tolerant of casing drift)
-    '   - PropertyNamingPolicy = SnakeCaseLower (matches the snake_case keys)
-    ' ---------------------------------------------------------------------------
+    ' Grab the JSON from GitHub and load it into AllGames
     Public Sub LoadGames()
         Try
-            Console.WriteLine("Fetching games from: " & GamesJsonUrl)
+            Console.WriteLine($"Fetching games from: {GamesJsonUrl}")
 
             Dim json = client.GetStringAsync(GamesJsonUrl).Result
 
             Dim options As New JsonSerializerOptions With {
-                    .PropertyNameCaseInsensitive = True,
-                    .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                    }
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+            }
 
-            Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
-            ' If the JSON didn't have a games array for some reason, I just use an empty list
+            Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
             AllGames = If(root?.Games, New List(Of GameItem)())
 
             Console.WriteLine($"Loaded {AllGames.Count} games")
-
         Catch ex As Exception
-            Console.WriteLine("Failed to fetch games.json: " & ex.Message)
+            Console.WriteLine($"Failed to fetch games.json: {ex.Message}")
         End Try
     End Sub
 
-    ' ---------------------------------------------------------------------------
-    ' GetUniqueDevelopers
-    '   Returns the distinct, case-insensitively sorted list of developer
-    '   names across all loaded games (blanks excluded).
-    '
-    ' Example:
-    '   { "CD Projekt Red", "EA Vancouver", "Square Enix" }
-    ' ---------------------------------------------------------------------------
+    ' Unique developer names, sorted, no blanks
     Public Function GetUniqueDevelopers() As List(Of String)
         Return AllGames.
             Select(Function(g) g.GameInfo?.Developer).
@@ -71,11 +43,7 @@ Public Module GamesData
             ToList()
     End Function
 
-    ' ---------------------------------------------------------------------------
-    ' GetUniquePublishers
-    '   Returns the distinct, case-insensitively sorted list of publisher
-    '   names across all loaded games (blanks excluded).
-    ' ---------------------------------------------------------------------------
+    ' Unique publisher names, sorted, no blanks
     Public Function GetUniquePublishers() As List(Of String)
         Return AllGames.
             Select(Function(g) g.GameInfo?.Publisher).
@@ -85,11 +53,7 @@ Public Module GamesData
             ToList()
     End Function
 
-    ' ---------------------------------------------------------------------------
-    ' GetUniqueSceneGroups
-    '   Returns the distinct, case-insensitively sorted list of scene group
-    '   names across all loaded games (blanks excluded).
-    ' ---------------------------------------------------------------------------
+    ' Unique scene group names, sorted, no blanks
     Public Function GetUniqueSceneGroups() As List(Of String)
         Return AllGames.
             Select(Function(g) g.CrackInfo?.SceneGroup).
@@ -99,31 +63,12 @@ Public Module GamesData
             ToList()
     End Function
 
-    ' ---------------------------------------------------------------------------
-    ' FilterGames
-    '   Applies the four optional filters to AllGames and returns the matching
-    '   subset as a new list. The search term uses fuzzy matching — I strip
-    '   out special characters from both the search term and the title before
-    '   comparing, so "resident evil 4" matches "Resident Evil: 4" etc.
-    '
-    ' Parameters:
-    '   search      - fuzzy text matched against Title or SortTitle (case-ins.)
-    '   developers  - comma-separated developer names (OR), or blank for all
-    '   publishers   - comma-separated publisher names (OR), or blank for all
-    '   sceneGroups - comma-separated scene group names (OR), or blank for all
-    '
-    ' Example:
-    '   FilterGames("resident evil 4", "", "", "")
-    '   -> matches "Resident Evil 4" even though the query lacks the special chars
-    ' ---------------------------------------------------------------------------
-    Public Function FilterGames(search As String,
-                                developers As String,
-                                publishers As String,
-                                sceneGroups As String) As List(Of GameItem)
-
+    ' Fuzzy text search + comma-separated filters. Strips special chars so
+    ' "resident evil 4" matches "Resident Evil: 4".
+    Public Function FilterGames(search As String, developers As String,
+                                publishers As String, sceneGroups As String) As List(Of GameItem)
         Dim result = AllGames.AsEnumerable()
 
-        ' If the user typed something, I do a fuzzy match against title and sort title
         If Not String.IsNullOrWhiteSpace(search) Then
             Dim normalizedTerm = NormalizeForSearch(search)
             result = result.Where(Function(g)
@@ -133,19 +78,16 @@ Public Module GamesData
             End Function)
         End If
 
-        ' Developer filter — if they picked multiple, I split on comma and match any of them
         If Not String.IsNullOrWhiteSpace(developers) Then
             Dim list = developers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
             result = result.Where(Function(g) list.Any(Function(d) String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
         End If
 
-        ' Same deal for publishers
         If Not String.IsNullOrWhiteSpace(publishers) Then
             Dim list = publishers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
             result = result.Where(Function(g) list.Any(Function(p) String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
         End If
 
-        ' And same for scene groups
         If Not String.IsNullOrWhiteSpace(sceneGroups) Then
             Dim list = sceneGroups.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
             result = result.Where(Function(g) list.Any(Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
@@ -154,53 +96,30 @@ Public Module GamesData
         Return result.ToList()
     End Function
 
-    ' ---------------------------------------------------------------------------
-    ' FilterByAppId
-    '   Returns games whose Steam appid matches the given value. This is a
-    '   straight equality check on GameInfo.AppId — no fuzzy matching needed
-    '   since appids are just numbers.
-    '
-    ' Example:
-    '   FilterByAppId("2244210") -> the single game with that appid (if it exists)
-    ' ---------------------------------------------------------------------------
+    ' Direct AppID lookup — straight equality, no fuzzy matching needed.
     Public Function FilterByAppId(appId As String) As List(Of GameItem)
         Dim id = appId.Trim()
         Return AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
     End Function
 
-    ' ---------------------------------------------------------------------------
-    ' NormalizeForSearch
-    '   Strips out anything that isn't a letter, number, or space, converts to
-    '   lowercase, and collapses extra whitespace. This lets me do fuzzy
-    '   matching so "resident evil 4" matches "Resident Evil: 4" — the colon
-    '   and any other special chars just get thrown away before comparing.
-    ' ---------------------------------------------------------------------------
+    ' Throw away anything that isn't a letter, number, or space
     Private Function NormalizeForSearch(s As String) As String
         If String.IsNullOrWhiteSpace(s) Then Return ""
         Dim sb As New Text.StringBuilder()
         For Each c In s.ToLowerInvariant()
-            If Char.IsLetterOrDigit(c) OrElse c = " "c Then
-                sb.Append(c)
-            End If
+            If Char.IsLetterOrDigit(c) OrElse c = " "c Then sb.Append(c)
         Next
-        ' Collapse multiple spaces into one so spacing differences don't matter
         Return System.Text.RegularExpressions.Regex.Replace(sb.ToString(), "\s+", " ").Trim()
     End Function
 End Module
 
-' =============================================================================
-' JSON model classes (System.Text.Json)
-' Each class mirrors the shape of data/games.json. Property names use
-' JsonPropertyName to map snake_case JSON keys to PascalCase VB properties.
-' =============================================================================
+' JSON model classes — match the shape of games.json.
 
-' Root object: { "games": [ ... ] }
 Public Class GamesRoot
     <JsonPropertyName("games")>
     Public Property Games As List(Of GameItem)
 End Class
 
-' Single game entry.
 Public Class GameItem
     <JsonPropertyName("title")>
     Public Property Title As String
@@ -218,7 +137,6 @@ Public Class GameItem
     Public Property CrackInfo As CrackInfo
 End Class
 
-' General release metadata.
 Public Class GameInfo
     <JsonPropertyName("appid")>
     Public Property AppId As String
@@ -233,7 +151,6 @@ Public Class GameInfo
     Public Property ReleaseDate As String
 End Class
 
-' DRM / crack metadata.
 Public Class CrackInfo
     <JsonPropertyName("crack_status")>
     Public Property CrackStatus As String
