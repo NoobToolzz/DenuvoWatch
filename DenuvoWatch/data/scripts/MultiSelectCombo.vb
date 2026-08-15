@@ -1,7 +1,10 @@
 Imports System.Drawing
 Imports System.Windows.Forms
 
-' MultiSelectCombo — turns a ComboBox into a multi-select with checkboxes.
+' =============================================================================
+' Class: MultiSelectCombo
+' Turns a ComboBox into a multi-select with checkboxes in a popup.
+' =============================================================================
 Public Class MultiSelectCombo
     Private ReadOnly combo As ComboBox
     Private ReadOnly ownerForm As Form
@@ -68,6 +71,15 @@ Public Class MultiSelectCombo
             Next
         End If
 
+        ' Apply theme to the popup list
+        If Utils.IsDarkTheme Then
+            checkedList.BackColor = Utils.DarkSurface
+            checkedList.ForeColor = Utils.DarkText
+        Else
+            checkedList.BackColor = SystemColors.Window
+            checkedList.ForeColor = SystemColors.ControlText
+        End If
+
         ' Cap at 300px tall so it scrolls if the list is long
         Dim itemHeight As Integer = checkedList.GetItemHeight(0)
         Dim listHeight = Math.Min(checkedList.Items.Count * (itemHeight + 4) + 4, 300)
@@ -92,7 +104,7 @@ Public Class MultiSelectCombo
         combo.Text = If(String.IsNullOrEmpty(display), placeholderText, display)
     End Sub
 
-    ' What's checked, joined by commas — for the URL
+    ' What's checked, joined by commas - for the URL
     Public Function GetCheckedItems() As String
         Dim selected As New List(Of String)
         For Each item In checkedList.CheckedItems
@@ -102,7 +114,7 @@ Public Class MultiSelectCombo
         Return String.Join(",", selected)
     End Function
 
-    ' Same but with spaces — for showing the user
+    ' Same but with spaces - for showing the user
     Public Function GetCheckedItemsDisplay() As String
         Dim selected As New List(Of String)
         For Each item In checkedList.CheckedItems

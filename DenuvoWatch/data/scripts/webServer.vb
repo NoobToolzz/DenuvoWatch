@@ -4,7 +4,10 @@ Imports Microsoft.AspNetCore.Builder
 Imports Microsoft.AspNetCore.Hosting
 Imports Microsoft.AspNetCore.Http
 
-' WebServer — local API that serves search results as JSON.
+' =============================================================================
+' Module: WebServer
+' Local API that serves search results as JSON on localhost:5050.
+' =============================================================================
 Public Module WebServer
     Friend webApp As WebApplication
 

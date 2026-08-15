@@ -3,7 +3,10 @@ Imports System.Net.Http
 Imports System.Text.Json
 Imports System.Text.Json.Serialization
 
-' GamesData — holds all the games we loaded from the JSON on GitHub.
+' =============================================================================
+' Module: GamesData
+' Holds all the games we loaded from the JSON on GitHub and lets us search them.
+' =============================================================================
 Public Module GamesData
     Private Const GamesJsonUrl As String =
         "https://raw.githubusercontent.com/NoobToolzz/DenuvoWatch/refs/heads/main/DenuvoWatch/data/games.json"
@@ -96,7 +99,7 @@ Public Module GamesData
         Return result.ToList()
     End Function
 
-    ' Direct AppID lookup — straight equality, no fuzzy matching needed.
+    ' Direct AppID lookup - straight equality, no fuzzy matching needed.
     Public Function FilterByAppId(appId As String) As List(Of GameItem)
         Dim id = appId.Trim()
         Return AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
@@ -113,7 +116,7 @@ Public Module GamesData
     End Function
 End Module
 
-' JSON model classes — match the shape of games.json.
+' JSON model classes - match the shape of games.json.
 
 Public Class GamesRoot
     <JsonPropertyName("games")>
