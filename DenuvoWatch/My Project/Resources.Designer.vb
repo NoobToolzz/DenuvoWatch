@@ -59,5 +59,5 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-    End Module
+    End module
 End Namespace

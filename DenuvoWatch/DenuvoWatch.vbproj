@@ -6,12 +6,17 @@
         <StartupObject>Sub Main</StartupObject>
         <UseWindowsForms>true</UseWindowsForms>
         <MyType>WindowsForms</MyType>
+        <ApplicationIcon>data\assets\DenuvoWatch.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
-        <Import Include="System.Data"/>
-        <Import Include="System.Drawing"/>
-        <Import Include="System.Windows.Forms"/>
+      <EmbeddedResource Include="data\assets\DenuvoWatch.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Import Include="System.Data" />
+        <Import Include="System.Drawing" />
+        <Import Include="System.Windows.Forms" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
 </Project>
