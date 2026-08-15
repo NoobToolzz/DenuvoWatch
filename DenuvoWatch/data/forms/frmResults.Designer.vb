@@ -280,20 +280,20 @@ Partial Class frmResults
         ' 
         ' lblSearchFilters
         ' 
-        lblSearchFilters.AutoSize = True
         lblSearchFilters.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblSearchFilters.Location = New Point(654, 58)
+        lblSearchFilters.Location = New Point(570, 58)
         lblSearchFilters.Margin = New Padding(4, 0, 4, 0)
         lblSearchFilters.Name = "lblSearchFilters"
-        lblSearchFilters.Size = New Size(42, 16)
+        lblSearchFilters.Size = New Size(239, 16)
         lblSearchFilters.TabIndex = 32
         lblSearchFilters.Text = "Games"
+        lblSearchFilters.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
         Label2.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label2.Location = New Point(563, 22)
+        Label2.Location = New Point(570, 22)
         Label2.Margin = New Padding(4, 0, 4, 0)
         Label2.Name = "Label2"
         Label2.Size = New Size(239, 36)

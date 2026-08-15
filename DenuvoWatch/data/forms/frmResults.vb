@@ -2,6 +2,7 @@
 Imports System.Drawing
 Imports System.IO
 Imports System.Text.Json
+Imports System.Windows.Forms
 
 ' =============================================================================
 ' Class: frmResults
@@ -39,11 +40,20 @@ Public Class frmResults
                 .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
                 }
 
-        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
+        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
 
-        ' Show whatever filters the user searched with
-        lblSearchFilters.Text = If(SearchFilters, "")
+        ' Show whatever filters the user searched with, and stick them in the window title too
+        Dim filterText = If(SearchFilters, "")
+        lblSearchFilters.Text = filterText
+        FitLabelText(lblSearchFilters, filterText)
+
+        ' Window title looks like: DenuvoWatch - Search Results | "query" · filters
+        If Not String.IsNullOrWhiteSpace(filterText) Then
+            Me.Text = "DenuvoWatch - Search Results | " & filterText
+        Else
+            Me.Text = "DenuvoWatch - Search Results"
+        End If
 
         lbGames.BeginUpdate()
         lbGames.Items.Clear()
@@ -137,6 +147,31 @@ Public Class frmResults
         Catch
             picGameCover.Image = Nothing
         End Try
+    End Sub
+
+    ' ---------------------------------------------------------------------------
+    ' FitLabelText
+    '   Shrinks the font size of the label so the text fits within its bounds.
+    '   I start from the label's current font size and keep dropping it until
+    '   TextRenderer says the text fits — if it already fits, I leave it alone.
+    ' ---------------------------------------------------------------------------
+    Private Sub FitLabelText(lbl As Label, text As String)
+        If String.IsNullOrEmpty(text) Then Return
+
+        ' Start from the original font size the designer gave us
+        Dim baseFont = lbl.Font
+        Dim fontSize As Single = baseFont.Size
+
+        ' Keep shrinking until it fits or we hit a minimum of 5pt
+        Do While fontSize > 5
+            lbl.Font = New Font(baseFont.FontFamily, fontSize, baseFont.Style)
+            Dim measured = TextRenderer.MeasureText(text, lbl.Font, lbl.ClientSize, TextFormatFlags.NoPadding)
+            If measured.Width <= lbl.ClientSize.Width AndAlso
+               measured.Height <= lbl.ClientSize.Height Then
+                Exit Do
+            End If
+            fontSize -= 0.5F
+        Loop
     End Sub
 
     ' ---------------------------------------------------------------------------
