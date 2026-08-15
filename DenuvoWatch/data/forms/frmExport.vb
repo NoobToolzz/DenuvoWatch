@@ -136,12 +136,12 @@ Public Class frmExport
             For i = 0 To cols.Count - 1
                 Dim value = GetFieldValue(g, cols(i))
                 If String.IsNullOrWhiteSpace(value) Then value = "—"
-                sb.AppendLine($"│ {cols(i),-14} │ {value}")
+                sb.AppendLine("│ " & cols(i).PadRight(14) & " │ " & value)
             Next
 
             Dim steamUrl = GetSteamUrl(g)
             If Not String.IsNullOrWhiteSpace(steamUrl) Then
-                sb.AppendLine($"│ {"Steam Link",-14} │ {steamUrl}")
+                sb.AppendLine("│ " & "Steam Link".PadRight(14) & " │ " & steamUrl)
             End If
 
             sb.AppendLine("└" & New String("─"c, innerWidth - 2) & "┘")

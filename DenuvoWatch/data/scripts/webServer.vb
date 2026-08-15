@@ -47,7 +47,7 @@ Public Module WebServer
             games = GamesData.FilterGames(query, developer, publisher, sceneGroup)
         End If
 
-        Dim resultObj As New With {.games = games}
+        Dim resultObj = New With {.games = games}
         Dim json = JsonSerializer.Serialize(resultObj, jsonOpts)
 
         Return Results.Content(json, "application/json")
