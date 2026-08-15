@@ -22,6 +22,7 @@ Partial Class frmExport
     'Do not modify using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmExport))
         rtbExportPreview = New RichTextBox()
         btnExport = New Button()
         btnReturnExplorer = New Button()
@@ -35,6 +36,7 @@ Partial Class frmExport
         rbFormatJSON = New RadioButton()
         rbFormatCSV = New RadioButton()
         rbFormatText = New RadioButton()
+        btnThemeToggle = New Button()
         gbExportColumns = New GroupBox()
         cbColSceneGroup = New CheckBox()
         cbColCrackDate = New CheckBox()
@@ -197,6 +199,18 @@ Partial Class frmExport
         rbFormatText.TabStop = True
         rbFormatText.Text = "Text"
         rbFormatText.UseVisualStyleBackColor = True
+        ' 
+        ' btnThemeToggle
+        ' 
+        btnThemeToggle.FlatAppearance.BorderSize = 0
+        btnThemeToggle.FlatStyle = FlatStyle.Flat
+        btnThemeToggle.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnThemeToggle.Location = New Point(858, 9)
+        btnThemeToggle.Name = "btnThemeToggle"
+        btnThemeToggle.Size = New Size(45, 41)
+        btnThemeToggle.TabIndex = 39
+        btnThemeToggle.Text = "☀️"
+        btnThemeToggle.UseVisualStyleBackColor = True
         ' 
         ' gbExportColumns
         ' 
@@ -373,6 +387,7 @@ Partial Class frmExport
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(915, 509)
+        Controls.Add(btnThemeToggle)
         Controls.Add(gbExportSorting)
         Controls.Add(gbExportColumns)
         Controls.Add(gbExportFormats)
@@ -382,7 +397,7 @@ Partial Class frmExport
         Controls.Add(btnReturnExplorer)
         Controls.Add(btnExport)
         Controls.Add(rtbExportPreview)
-        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmExport"
         Text = "DenuvoWatch - Export"
@@ -423,4 +438,5 @@ Partial Class frmExport
     Friend WithEvents rbSortTitleZA As RadioButton
     Friend WithEvents rbSortCrackStatus As RadioButton
     Friend WithEvents rbSortReleaseDate As RadioButton
+    Friend WithEvents btnThemeToggle As Button
 End Class

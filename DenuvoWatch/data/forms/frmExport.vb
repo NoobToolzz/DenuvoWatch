@@ -5,7 +5,10 @@ Imports System.Text
 Imports System.Text.Json
 Imports System.Windows.Forms
 
-' frmExport — pick a format, see a live preview, and save it to a file.
+' =============================================================================
+' Form: frmExport
+' Pick a format, see a live preview, tweak columns and sorting, save to a file.
+' =============================================================================
 Public Class frmExport
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ResultsJson As String
@@ -36,6 +39,7 @@ Public Class frmExport
         games = If(root?.Games, New List(Of GameItem)())
 
         StyleFormButtons(Me)
+        ApplyTheme(Me)
         UpdatePreview()
     End Sub
 
@@ -109,7 +113,7 @@ Public Class frmExport
         Return f
     End Function
 
-    ' Text — boxed blocks with borders. AppID in brackets, Steam link at the bottom
+    ' Text - boxed blocks with borders. AppID in brackets, Steam link at the bottom
     Private Function GenerateText(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return ""
@@ -152,7 +156,7 @@ Public Class frmExport
         Return sb.ToString()
     End Function
 
-    ' CSV — always include AppID and Steam Link columns
+    ' CSV - always include AppID and Steam Link columns
     Private Function GenerateCSV(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return ""
@@ -180,7 +184,7 @@ Public Class frmExport
         Return sb.ToString()
     End Function
 
-    ' JSON — pretty, with metadata and appid + steam_link per game
+    ' JSON - pretty, with metadata and appid + steam_link per game
     Private Function GenerateJSON(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return "{}"
@@ -210,7 +214,7 @@ Public Class frmExport
         Return JsonSerializer.Serialize(result, options)
     End Function
 
-    ' HTML — styled page, AppID hyperlinked, crack status color-coded
+    ' HTML - styled page, AppID hyperlinked, crack status color-coded
     Private Function GenerateHTML(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return ""
@@ -285,7 +289,7 @@ Public Class frmExport
         Return sb.ToString()
     End Function
 
-    ' Markdown — AppID linked, crack status gets emojis, Steam link at the bottom
+    ' Markdown - AppID linked, crack status gets emojis, Steam link at the bottom
     Private Function GenerateMarkdown(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return ""
@@ -345,7 +349,7 @@ Public Class frmExport
         Return sb.ToString()
     End Function
 
-    ' XML — always include appid and steam_link per game
+    ' XML - always include appid and steam_link per game
     Private Function GenerateXML(games As List(Of GameItem)) As String
         Dim cols = GetSelectedColumns()
         If cols.Count = 0 OrElse games.Count = 0 Then Return "<denuvowatch />"
@@ -474,5 +478,10 @@ Public Class frmExport
     ' Back to search, fresh start
     Private Sub btnReturnSearch_Click(sender As Object, e As EventArgs) Handles btnReturnSearch.Click
         NavigateTo(Me, Function() New frmSearch())
+    End Sub
+
+    ' Toggle between dark and light theme
+    Private Sub btnThemeToggle_Click(sender As Object, e As EventArgs) Handles btnThemeToggle.Click
+        ToggleTheme(Me)
     End Sub
 End Class

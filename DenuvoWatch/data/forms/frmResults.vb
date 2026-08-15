@@ -4,7 +4,10 @@ Imports System.IO
 Imports System.Text.Json
 Imports System.Windows.Forms
 
-' frmResults — shows your search results with all the game details.
+' =============================================================================
+' Form: frmResults
+' Shows your search results with all the game details, grouped by crack status.
+' =============================================================================
 Public Class frmResults
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ResultsJson As String
@@ -32,6 +35,7 @@ Public Class frmResults
     ' Parse the JSON, fill the list, set the title
     Private Sub frmResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         StyleFormButtons(Me)
+        ApplyTheme(Me)
 
         Dim options As New JsonSerializerOptions With {
             .PropertyNameCaseInsensitive = True,
@@ -112,14 +116,24 @@ Public Class frmResults
         End If
     End Sub
 
-    ' Owner-draw: headers get colored, games get drawn normally
+    ' Owner-draw: headers get colored, games get drawn normally. Adapts to dark/light theme.
     Private Sub lbGames_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lbGames.DrawItem
         If e.Index < 0 Then Return
 
-        e.DrawBackground()
+        Dim isSelected = (e.State And DrawItemState.Selected) = DrawItemState.Selected
+
+        ' Fill the background - dark theme uses dark surface, light theme uses system default
+        If isSelected Then
+            e.DrawBackground()
+        Else
+            Dim bgColor = If(Utils.IsDarkTheme, Utils.DarkSurface, SystemColors.Window)
+            Using brush As New SolidBrush(bgColor)
+                e.Graphics.FillRectangle(brush, e.Bounds)
+            End Using
+        End If
 
         If headerIndices.Contains(e.Index) Then
-            ' Draw a header — centered with its category color
+            ' Draw a header - centered with its category color
             Dim headerText = lbGames.Items(e.Index).ToString()
             Dim category = ExtractCategory(headerText)
             Dim headerColor As Color = Nothing
@@ -136,24 +150,22 @@ Public Class frmResults
         Else
             ' Draw a normal game title
             Dim text = lbGames.Items(e.Index).ToString()
-            Dim isSelected = (e.State And DrawItemState.Selected) = DrawItemState.Selected
-            Using brush As New SolidBrush(If(isSelected, SystemColors.HighlightText, SystemColors.ControlText))
-                TextRenderer.DrawText(e.Graphics, text, lbGames.Font, e.Bounds, brush.Color,
-                    TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
-            End Using
+            Dim textColor = If(isSelected, SystemColors.HighlightText, If(Utils.IsDarkTheme, Utils.DarkText, SystemColors.ControlText))
+            TextRenderer.DrawText(e.Graphics, text, lbGames.Font, e.Bounds, textColor,
+                TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
         End If
 
         e.DrawFocusRectangle()
     End Sub
 
-    ' Measure item height — all items same height
+    ' Measure item height - all items same height
     Private Sub lbGames_MeasureItem(sender As Object, e As MeasureItemEventArgs) Handles lbGames.MeasureItem
         e.ItemHeight = lbGames.Font.Height + 2
     End Sub
 
     ' When the user picks a game, fill in all the details
     Private Sub lbGames_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbGames.SelectedIndexChanged
-        ' If a header got clicked, don't do anything — it's not a real game
+        ' If a header got clicked, don't do anything - it's not a real game
         If lbGames.SelectedIndex < 0 Then Return
         If headerIndices.Contains(lbGames.SelectedIndex) Then Return
 
@@ -267,11 +279,11 @@ Public Class frmResults
     ' Send the data to the export form
     Private Sub btnProceedToExport_Click(sender As Object, e As EventArgs) Handles btnProceedToExport.Click
         NavigateTo(Me, Function()
-            Dim exportForm As New frmExport()
-            exportForm.ResultsJson = ResultsJson
-            exportForm.SearchFilters = SearchFilters
-            Return exportForm
-        End Function)
+                           Dim exportForm As New frmExport()
+                           exportForm.ResultsJson = ResultsJson
+                           exportForm.SearchFilters = SearchFilters
+                           Return exportForm
+                       End Function)
     End Sub
 
     ' Open the Steam page in the browser
@@ -289,5 +301,14 @@ Public Class frmResults
     End Sub
 
     Private Sub grpGameInfo_Enter(sender As Object, e As EventArgs) Handles grpGameInfo.Enter
+    End Sub
+
+    ' Toggle between dark and light theme
+    Private Sub btnThemeToggle_Click(sender As Object, e As EventArgs) Handles btnThemeToggle.Click
+        ToggleTheme(Me)
+    End Sub
+
+    Private Sub lblSearchFilters_Click(sender As Object, e As EventArgs)
+
     End Sub
 End Class

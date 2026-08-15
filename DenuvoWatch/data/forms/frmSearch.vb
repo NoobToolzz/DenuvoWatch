@@ -2,7 +2,10 @@
 Imports System.Text.Json
 Imports System.Text.RegularExpressions
 
-' frmSearch — pick your filters and search for games.
+' =============================================================================
+' Form: frmSearch
+' Pick your filters and search for games, or type an AppID to jump straight to one.
+' =============================================================================
 Public Class frmSearch
     Private ReadOnly http As New HttpClient()
 
@@ -13,6 +16,7 @@ Public Class frmSearch
     ' Fill the dropdowns and wrap them with checkbox popups
     Private Sub frmSearch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         StyleFormButtons(Me)
+        ApplyTheme(Me)
         PopulateFilterComboBoxes(cbDeveloper, cbPublisher, cbSceneGroup)
 
         comboPublisher = New MultiSelectCombo(cbPublisher, Me)
@@ -20,7 +24,7 @@ Public Class frmSearch
         comboSceneGroup = New MultiSelectCombo(cbSceneGroup, Me)
     End Sub
 
-    ' If the user typed a pure number, that's an AppID — lock the filters down
+    ' If the user typed a pure number, that's an AppID - lock the filters down
     Private Sub tbQuery_TextChanged(sender As Object, e As EventArgs) Handles tbQuery.TextChanged
         Dim text = tbQuery.Text.Trim()
 
@@ -113,11 +117,11 @@ Public Class frmSearch
     ' Helper to avoid repeating NavigateTo boilerplate.
     Private Sub NavigateToResults(json As String, filterDisplay As String)
         NavigateTo(Me, Function()
-            Dim results As New frmResults()
-            results.ResultsJson = json
-            results.SearchFilters = filterDisplay
-            Return results
-        End Function)
+                           Dim results As New frmResults()
+                           results.ResultsJson = json
+                           results.SearchFilters = filterDisplay
+                           Return results
+                       End Function)
     End Sub
 
     ' Deserialises the API JSON into a list of GameItem.
@@ -162,7 +166,7 @@ Public Class frmSearch
         comboSceneGroup.Reset()
     End Sub
 
-    ' Builds the encoded API URL — only non-blank params are included.
+    ' Builds the encoded API URL - only non-blank params are included.
     Private Function BuildSearchUrl(query As String, developer As String,
                                     publisher As String, sceneGroup As String) As String
         Dim parts As New List(Of String)
@@ -174,4 +178,13 @@ Public Class frmSearch
 
         Return $"http://localhost:5050/search?{String.Join("&", parts)}"
     End Function
+
+    ' Toggle between dark and light theme
+    Private Sub btnThemeToggle_Click(sender As Object, e As EventArgs) Handles btnThemeToggle.Click
+        ToggleTheme(Me)
+    End Sub
+
+    Private Sub lblTitle_Click(sender As Object, e As EventArgs) Handles lblTitle.Click
+
+    End Sub
 End Class

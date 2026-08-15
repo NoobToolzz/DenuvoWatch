@@ -23,6 +23,7 @@ Partial Class frmSearch
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmSearch))
         lblTitle = New Label()
         cbPublisher = New ComboBox()
         cbDeveloper = New ComboBox()
@@ -32,6 +33,7 @@ Partial Class frmSearch
         Label1 = New Label()
         gbFilters = New GroupBox()
         toolTipFilters = New ToolTip(components)
+        btnThemeToggle = New Button()
         gbFilters.SuspendLayout()
         SuspendLayout()
         ' 
@@ -127,18 +129,31 @@ Partial Class frmSearch
         gbFilters.TabStop = False
         gbFilters.Text = "Filters"
         ' 
+        ' btnThemeToggle
+        ' 
+        btnThemeToggle.FlatAppearance.BorderSize = 0
+        btnThemeToggle.FlatStyle = FlatStyle.Flat
+        btnThemeToggle.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnThemeToggle.Location = New Point(552, 9)
+        btnThemeToggle.Name = "btnThemeToggle"
+        btnThemeToggle.Size = New Size(45, 39)
+        btnThemeToggle.TabIndex = 8
+        btnThemeToggle.Text = "☀️"
+        btnThemeToggle.UseVisualStyleBackColor = True
+        ' 
         ' frmSearch
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control
         ClientSize = New Size(610, 320)
+        Controls.Add(btnThemeToggle)
         Controls.Add(gbFilters)
         Controls.Add(Label1)
         Controls.Add(tbQuery)
         Controls.Add(btnSearch)
         Controls.Add(lblTitle)
-        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmSearch"
         Text = "DenuvoWatch - Search"
@@ -157,4 +172,5 @@ Partial Class frmSearch
     Friend WithEvents Label1 As Label
     Friend WithEvents gbFilters As GroupBox
     Friend WithEvents toolTipFilters As System.Windows.Forms.ToolTip
+    Friend WithEvents btnThemeToggle As Button
 End Class

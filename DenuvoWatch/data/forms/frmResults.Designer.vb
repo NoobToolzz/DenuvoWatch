@@ -22,6 +22,7 @@ Partial Class frmResults
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmResults))
         lbGames = New ListBox()
         lblGames = New Label()
         txtPublisher = New TextBox()
@@ -45,6 +46,7 @@ Partial Class frmResults
         lblSearchFilters = New Label()
         Label2 = New Label()
         txtGameSearch = New TextBox()
+        btnThemeToggle = New Button()
         grpGameInfo.SuspendLayout()
         grpCrackInfo.SuspendLayout()
         CType(picGameCover, ComponentModel.ISupportInitialize).BeginInit()
@@ -53,13 +55,13 @@ Partial Class frmResults
         ' 
         ' lbGames
         ' 
+        lbGames.DrawMode = DrawMode.OwnerDrawFixed
         lbGames.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lbGames.FormattingEnabled = True
-        lbGames.DrawMode = DrawMode.OwnerDrawFixed
         lbGames.Location = New Point(47, 81)
         lbGames.Margin = New Padding(4, 3, 4, 3)
         lbGames.Name = "lbGames"
-        lbGames.Size = New Size(408, 690)
+        lbGames.Size = New Size(408, 676)
         lbGames.TabIndex = 3
         ' 
         ' lblGames
@@ -284,7 +286,7 @@ Partial Class frmResults
         ' lblSearchFilters
         ' 
         lblSearchFilters.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblSearchFilters.Location = New Point(503, 58)
+        lblSearchFilters.Location = New Point(503, 57)
         lblSearchFilters.Margin = New Padding(4, 0, 4, 0)
         lblSearchFilters.Name = "lblSearchFilters"
         lblSearchFilters.Size = New Size(371, 16)
@@ -294,16 +296,16 @@ Partial Class frmResults
         ' Label2
         ' 
         Label2.Font = New Font("JetBrains Mono", 20.25F, FontStyle.Bold Or FontStyle.Underline)
-        Label2.Location = New Point(503, 22)
+        Label2.Location = New Point(503, 21)
         Label2.Margin = New Padding(4, 0, 4, 0)
         Label2.Name = "Label2"
         Label2.Size = New Size(371, 36)
         Label2.TabIndex = 33
         Label2.Text = "Search Results"
         Label2.TextAlign = ContentAlignment.MiddleCenter
-        '
+        ' 
         ' txtGameSearch
-        '
+        ' 
         txtGameSearch.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         txtGameSearch.Location = New Point(47, 776)
         txtGameSearch.Margin = New Padding(4, 3, 4, 3)
@@ -311,12 +313,25 @@ Partial Class frmResults
         txtGameSearch.PlaceholderText = "Search results..."
         txtGameSearch.Size = New Size(408, 23)
         txtGameSearch.TabIndex = 34
-        '
+        ' 
+        ' btnThemeToggle
+        ' 
+        btnThemeToggle.FlatAppearance.BorderSize = 0
+        btnThemeToggle.FlatStyle = FlatStyle.Flat
+        btnThemeToggle.Font = New Font("JetBrains Mono", 8.999999F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnThemeToggle.Location = New Point(1266, 12)
+        btnThemeToggle.Name = "btnThemeToggle"
+        btnThemeToggle.Size = New Size(45, 33)
+        btnThemeToggle.TabIndex = 35
+        btnThemeToggle.Text = "☀️"
+        btnThemeToggle.UseVisualStyleBackColor = True
+        ' 
         ' frmResults
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(1323, 832)
+        Controls.Add(btnThemeToggle)
         Controls.Add(Label2)
         Controls.Add(lblSearchFilters)
         Controls.Add(btnReturn)
@@ -327,7 +342,7 @@ Partial Class frmResults
         Controls.Add(lblGames)
         Controls.Add(lbGames)
         Controls.Add(txtGameSearch)
-        Icon = New System.Drawing.Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("DenuvoWatch.DenuvoWatch.ico"))
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Margin = New Padding(4, 3, 4, 3)
         Name = "frmResults"
         Text = "DenuvoWatch - Search Results"
@@ -338,6 +353,7 @@ Partial Class frmResults
         CType(picGameCover, ComponentModel.ISupportInitialize).EndInit()
         picGameCover.ResumeLayout(False)
         ResumeLayout(False)
+        PerformLayout()
 
     End Sub
 
@@ -364,4 +380,5 @@ Partial Class frmResults
     Friend WithEvents lblSearchFilters As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents txtGameSearch As TextBox
+    Friend WithEvents btnThemeToggle As Button
 End Class
