@@ -1,6 +1,8 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Text
 Imports System.Text.Json
+Imports System.Text.RegularExpressions
 
 ' =============================================================================
 ' Form: frmResults
@@ -107,20 +109,19 @@ Public Class frmResults
         Next
     End Sub
 
-    ' Build the centered header text with = padding
+    ' Just the header text - the DrawItem handler centers it and colors it
     Private Function BuildHeaderText(header As String) As String
-        ' Figure out how many = fit on each side
-        Dim textSize = TextRenderer.MeasureText(header & " ", lbGames.Font)
-        Dim availableWidth = lbGames.ClientSize.Width - 6  ' account for scrollbar
-        Dim equalsCount = Math.Max(5, (availableWidth - textSize.Width)\2\11)  ' each = is ~11px wide
-        Return New String("="c, equalsCount) & " " & header & " " & New String("="c, equalsCount)
+        Return header
     End Function
 
-    ' Live filter the ListBox as the user types in the search bar
+    ' Live filter the ListBox as the user types - fuzzy match like the main search
     Private Sub txtGameSearch_TextChanged(sender As Object, e As EventArgs) Handles txtGameSearch.TextChanged
-        Dim term = txtGameSearch.Text.Trim().ToLowerInvariant()
+        Dim term = NormalizeForSearch(txtGameSearch.Text)
 
-        games = allGames.Where(Function(g) g.Title.ToLowerInvariant().Contains(term)).ToList()
+        games = allGames.Where(Function(g)
+            Dim normTitle = NormalizeForSearch(If(g.Title, ""))
+            Return normTitle.Contains(term)
+        End Function).ToList()
         PopulateListBox(games)
 
         If lbGames.Items.Count > 0 Then
@@ -129,6 +130,16 @@ Public Class frmResults
             ClearDetailFields()
         End If
     End Sub
+
+    ' Strip special chars and collapse whitespace so "resident evil" matches "Resident Evil: 4"
+    Private Function NormalizeForSearch(s As String) As String
+        If String.IsNullOrWhiteSpace(s) Then Return ""
+        Dim sb As New StringBuilder()
+        For Each c In s.ToLowerInvariant()
+            If Char.IsLetterOrDigit(c) OrElse c = " "c Then sb.Append(c)
+        Next
+        Return Regex.Replace(sb.ToString(), "\s+", " ").Trim()
+    End Function
 
     ' Owner-draw: headers get colored, games get drawn normally. Adapts to dark/light theme.
     Private Sub lbGames_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lbGames.DrawItem
@@ -147,19 +158,20 @@ Public Class frmResults
         End If
 
         If headerIndices.Contains(e.Index) Then
-            ' Draw a header - centered with its category color
+            ' Draw a header - slightly larger font, centered with its category color
             Dim headerText = lbGames.Items(e.Index).ToString()
             Dim category = ExtractCategory(headerText)
             Dim headerColor As Color = Nothing
             headerColors.TryGetValue(category, headerColor)
             Dim drawColor = If(headerColor <> Nothing, headerColor, SystemColors.ControlText)
 
-            Using brush As New SolidBrush(drawColor)
+            Using headerFont As New Font(lbGames.Font.FontFamily, lbGames.Font.Size + 2, FontStyle.Bold),
+                brush As New SolidBrush(drawColor)
                 Dim sf As New StringFormat With {
                         .Alignment = StringAlignment.Center,
                         .LineAlignment = StringAlignment.Center
                         }
-                e.Graphics.DrawString(headerText, lbGames.Font, brush, e.Bounds, sf)
+                e.Graphics.DrawString(headerText, headerFont, brush, e.Bounds, sf)
             End Using
         Else
             ' Draw a normal game title
@@ -173,8 +185,9 @@ Public Class frmResults
         e.DrawFocusRectangle()
     End Sub
 
-    ' Measure item height - all items same height
+    ' Measure item height - headers get extra height for the larger font
     Private Sub lbGames_MeasureItem(sender As Object, e As MeasureItemEventArgs) Handles lbGames.MeasureItem
+        ' Default height for normal items
         e.ItemHeight = lbGames.Font.Height + 2
     End Sub
 
@@ -322,19 +335,6 @@ Public Class frmResults
     ' Toggle between dark and light theme
     Private Sub btnThemeToggle_Click(sender As Object, e As EventArgs) Handles btnThemeToggle.Click
         ToggleTheme(Me)
-    End Sub
-
-    ' When the form resizes, rebuild the headers so the ='s adapt to the new width
-    Private Sub frmResults_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
-        If lbGames Is Nothing OrElse lbGames.Items.Count = 0 Then Return
-
-        ' Rebuild the header text for each header index with the new listbox width
-        For Each idx In headerIndices
-            Dim category = ExtractCategory(lbGames.Items(idx).ToString())
-            If Not String.IsNullOrEmpty(category) Then
-                lbGames.Items(idx) = BuildHeaderText(category)
-            End If
-        Next
     End Sub
 
     Private Sub lblSearchFilters_Click(sender As Object, e As EventArgs)
