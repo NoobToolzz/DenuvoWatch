@@ -8,11 +8,11 @@ Module Utils
     ' Theme state — default to light
     Public IsDarkTheme As Boolean = False
 
-    ' Dark theme palette
-    Public ReadOnly DarkBg As Color = ColorTranslator.FromHtml("#0a0a0c")
-    Public ReadOnly DarkSurface As Color = ColorTranslator.FromHtml("#16161a")
-    Public ReadOnly DarkBorder As Color = ColorTranslator.FromHtml("#24242a")
-    Public ReadOnly DarkText As Color = ColorTranslator.FromHtml("#ececef")
+    ' Dark theme palette — softer dark grey, not near-black
+    Public ReadOnly DarkBg As Color = ColorTranslator.FromHtml("#2b2b33")
+    Public ReadOnly DarkSurface As Color = ColorTranslator.FromHtml("#393941")
+    Public ReadOnly DarkBorder As Color = ColorTranslator.FromHtml("#4a4a55")
+    Public ReadOnly DarkText As Color = ColorTranslator.FromHtml("#dcdce0")
 
     ' Hide me, show the next form, close me when it closes
     Public Sub NavigateTo(current As Form, createNext As Func(Of Form))
@@ -43,7 +43,7 @@ Module Utils
 
             AddHandler btn.MouseEnter, Sub(s, e)
                 If IsDarkTheme Then
-                    btn.BackColor = Color.White
+                    btn.BackColor = Color.FromArgb(220, 220, 225)
                     btn.ForeColor = Color.Black
                 Else
                     btn.BackColor = Color.FromArgb(45, 45, 50)
@@ -63,7 +63,7 @@ Module Utils
             End Sub
             AddHandler btn.MouseDown, Sub(s, e)
                 If IsDarkTheme Then
-                    btn.BackColor = Color.FromArgb(230, 230, 235)
+                    btn.BackColor = Color.FromArgb(200, 200, 208)
                     btn.ForeColor = Color.Black
                 Else
                     btn.BackColor = Color.FromArgb(60, 60, 66)
@@ -72,7 +72,7 @@ Module Utils
             End Sub
             AddHandler btn.MouseUp, Sub(s, e)
                 If IsDarkTheme Then
-                    btn.BackColor = Color.White
+                    btn.BackColor = Color.FromArgb(220, 220, 225)
                     btn.ForeColor = Color.Black
                 Else
                     btn.BackColor = Color.FromArgb(45, 45, 50)
