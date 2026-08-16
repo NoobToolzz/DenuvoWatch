@@ -14,7 +14,7 @@ Public Module WebServer
     Private ReadOnly jsonOpts As New JsonSerializerOptions With {
         .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         .WriteIndented = False
-        }
+    }
 
     ' Set up the web server on localhost only
     Friend Function CreateWebApp() As WebApplication

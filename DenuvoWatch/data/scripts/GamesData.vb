@@ -24,11 +24,11 @@ Public Module GamesData
             Dim json = client.GetStringAsync(GamesJsonUrl).Result
 
             Dim options As New JsonSerializerOptions With {
-                    .PropertyNameCaseInsensitive = True,
-                    .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                    }
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+            }
 
-            Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
+            Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
             AllGames = If(root?.Games, New List(Of GameItem)())
 
             Console.WriteLine($"Loaded {AllGames.Count} games")
@@ -70,7 +70,7 @@ Public Module GamesData
     ' Fuzzy text search + comma-separated filters. Strips special chars so
     ' "resident evil 4" matches "Resident Evil: 4".
     Public Function FilterGames(search As String, developers As String,
-                                publishers As String, sceneGroups As String) As List(Of GameItem)
+        publishers As String, sceneGroups As String) As List(Of GameItem)
         Dim result = AllGames.AsEnumerable()
 
         If Not String.IsNullOrWhiteSpace(search) Then
@@ -84,32 +84,23 @@ Public Module GamesData
 
         If Not String.IsNullOrWhiteSpace(developers) Then
             Dim list = developers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(d) _
-                                            String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(
+                Function(g) list.Any(
+                    Function(d) String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
         End If
 
         If Not String.IsNullOrWhiteSpace(publishers) Then
             Dim list = publishers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(p) _
-                                            String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(
+                Function(g) list.Any(
+                    Function(p) String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
         End If
 
         If Not String.IsNullOrWhiteSpace(sceneGroups) Then
             Dim list = sceneGroups.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result =
-                result.Where(
-                    Function(g) _
-                                list.Any(
-                                    Function(s) _
-                                            String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
+            result = result.Where(
+                Function(g) list.Any(
+                    Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
         End If
 
         Return result.ToList()
@@ -118,8 +109,8 @@ Public Module GamesData
     ' Direct AppID lookup - straight equality, no fuzzy matching needed.
     Public Function FilterByAppId(appId As String) As List(Of GameItem)
         Dim id = appId.Trim()
-        Return _
-            AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
+        Return AllGames.Where(
+            Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
     End Function
 
     ' Throw away anything that isn't a letter, number, or space

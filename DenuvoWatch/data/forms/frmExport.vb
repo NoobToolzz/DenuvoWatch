@@ -17,13 +17,11 @@ Public Class frmExport
 
     Private games As List(Of GameItem)
 
-    Private ReadOnly _
-        columnKeys As String() =
-            {"title", "developer", "publisher", "release_date", "crack_status", "crack_date", "scene_group"}
+    Private ReadOnly columnKeys As String() =
+        {"title", "developer", "publisher", "release_date", "crack_status", "crack_date", "scene_group"}
 
-    Private ReadOnly _
-        columnLabels As String() =
-            {"Title", "Developer", "Publisher", "Release Date", "Crack Status", "Crack Date", "Scene Group"}
+    Private ReadOnly columnLabels As String() =
+        {"Title", "Developer", "Publisher", "Release Date", "Crack Status", "Crack Date", "Scene Group"}
 
     Private ReadOnly formatRadios As New List(Of RadioButton)
     Private ReadOnly columnChecks As New List(Of CheckBox)
@@ -32,16 +30,17 @@ Public Class frmExport
     ' Parse JSON, group up the controls, style buttons, show the preview
     Private Sub frmExport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         formatRadios.AddRange({rbFormatText, rbFormatCSV, rbFormatJSON, rbFormatHTML, rbFormatMarkdown, rbFormatXML})
-        columnChecks.AddRange(
-            {cbColTitle, cbColDeveloper, cbColPublisher, cbColReleaseDate, cbColCrackStatus, cbColCrackDate,
-             cbColSceneGroup})
+        columnChecks.AddRange({
+            cbColTitle, cbColDeveloper, cbColPublisher, cbColReleaseDate,
+            cbColCrackStatus, cbColCrackDate, cbColSceneGroup
+        })
         sortRadios.AddRange({rbSortNone, rbSortTitleAZ, rbSortTitleZA, rbSortCrackStatus, rbSortReleaseDate})
 
         Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                }
-        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
+            .PropertyNameCaseInsensitive = True,
+            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        }
+        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
 
         StyleFormButtons(Me)
@@ -196,9 +195,9 @@ Public Class frmExport
         If cols.Count = 0 OrElse games.Count = 0 Then Return "{}"
 
         Dim options As New JsonSerializerOptions With {
-                .WriteIndented = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                }
+            .WriteIndented = True,
+            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        }
 
         Dim rows As New List(Of Dictionary(Of String, String))
         For Each g In games
@@ -273,8 +272,7 @@ Public Class frmExport
                 If c = "Crack Status" Then
                     If val?.Equals("Cracked", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='cracked'"
                     If val?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='uncracked'"
-                    If val?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase) Then _
-                        cssClass = " class='hypervisor'"
+                    If val?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='hypervisor'"
                 End If
 
                 ' Link the AppID in the title
@@ -410,23 +408,23 @@ Public Class frmExport
     ' Any format/column/sort change refreshes the preview
     Private Sub FormatRadioButton_CheckedChanged(sender As Object, e As EventArgs) _
         Handles rbFormatText.CheckedChanged, rbFormatCSV.CheckedChanged,
-                rbFormatJSON.CheckedChanged, rbFormatHTML.CheckedChanged,
-                rbFormatMarkdown.CheckedChanged, rbFormatXML.CheckedChanged
+            rbFormatJSON.CheckedChanged, rbFormatHTML.CheckedChanged,
+            rbFormatMarkdown.CheckedChanged, rbFormatXML.CheckedChanged
         UpdatePreview()
     End Sub
 
     Private Sub ColumnCheckBox_CheckedChanged(sender As Object, e As EventArgs) _
         Handles cbColTitle.CheckedChanged, cbColDeveloper.CheckedChanged,
-                cbColPublisher.CheckedChanged, cbColReleaseDate.CheckedChanged,
-                cbColCrackStatus.CheckedChanged, cbColCrackDate.CheckedChanged,
-                cbColSceneGroup.CheckedChanged
+            cbColPublisher.CheckedChanged, cbColReleaseDate.CheckedChanged,
+            cbColCrackStatus.CheckedChanged, cbColCrackDate.CheckedChanged,
+            cbColSceneGroup.CheckedChanged
         UpdatePreview()
     End Sub
 
     Private Sub SortRadioButton_CheckedChanged(sender As Object, e As EventArgs) _
         Handles rbSortNone.CheckedChanged, rbSortTitleAZ.CheckedChanged,
-                rbSortTitleZA.CheckedChanged, rbSortCrackStatus.CheckedChanged,
-                rbSortReleaseDate.CheckedChanged
+            rbSortTitleZA.CheckedChanged, rbSortCrackStatus.CheckedChanged,
+            rbSortReleaseDate.CheckedChanged
         UpdatePreview()
     End Sub
 

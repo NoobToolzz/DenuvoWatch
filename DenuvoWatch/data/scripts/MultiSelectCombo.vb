@@ -1,5 +1,3 @@
-
-
 ' =============================================================================
 ' Class: MultiSelectCombo
 ' Turns a ComboBox into a multi-select with checkboxes in a popup.
@@ -28,19 +26,19 @@ Public Class MultiSelectCombo
         checkedList = New CheckedListBox() With {
             .CheckOnClick = True,
             .BorderStyle = BorderStyle.None
-            }
+        }
 
         ' The popup is a ToolStripDropDown so it doesn't steal focus
         host = New ToolStripControlHost(checkedList) With {
             .AutoSize = False,
             .Margin = New Padding(0, 0, 0, 0),
             .Padding = New Padding(0, 0, 0, 0)
-            }
+        }
 
         dropdown = New ToolStripDropDown() With {
             .AutoSize = False,
             .DropShadowEnabled = True
-            }
+        }
         dropdown.Items.Add(host)
 
         AddHandler checkedList.ItemCheck, Sub(s, e)

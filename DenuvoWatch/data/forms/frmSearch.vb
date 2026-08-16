@@ -123,20 +123,20 @@ Public Class frmSearch
     ' Helper to avoid repeating NavigateTo boilerplate.
     Private Sub NavigateToResults(json As String, filterDisplay As String)
         NavigateTo(Me, Function()
-            Dim results As New frmResults()
-            results.ResultsJson = json
-            results.SearchFilters = filterDisplay
-            Return results
-        End Function)
+                           Dim results As New frmResults()
+                           results.ResultsJson = json
+                           results.SearchFilters = filterDisplay
+                           Return results
+                       End Function)
     End Sub
 
     ' Deserialises the API JSON into a list of GameItem.
     Private Function ParseResultsJson(json As String) As List(Of GameItem)
         Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                }
-        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
+            .PropertyNameCaseInsensitive = True,
+            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        }
+        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
         Return If(root?.Games, New List(Of GameItem)())
     End Function
 
@@ -148,7 +148,7 @@ Public Class frmSearch
 
     ' Builds the filter summary: "query" · publishers · developers · scene groups
     Private Function BuildFiltersDisplay(query As String, publisher As String,
-                                         developer As String, sceneGroup As String) As String
+        developer As String, sceneGroup As String) As String
         Dim parts As New List(Of String)
 
         If Not String.IsNullOrWhiteSpace(query) Then parts.Add($"""{query}""")
@@ -174,7 +174,7 @@ Public Class frmSearch
 
     ' Builds the encoded API URL - only non-blank params are included.
     Private Function BuildSearchUrl(query As String, developer As String,
-                                    publisher As String, sceneGroup As String) As String
+        publisher As String, sceneGroup As String) As String
         Dim parts As New List(Of String)
 
         If Not String.IsNullOrWhiteSpace(query) Then parts.Add($"q={Uri.EscapeDataString(query)}")
