@@ -63,6 +63,7 @@ Partial Class frmResults
         lbGames.Name = "lbGames"
         lbGames.Size = New Size(408, 676)
         lbGames.TabIndex = 3
+        lbGames.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left
         ' 
         ' lblGames
         ' 
@@ -75,6 +76,7 @@ Partial Class frmResults
         lblGames.TabIndex = 8
         lblGames.Text = "Games"
         lblGames.TextAlign = ContentAlignment.MiddleCenter
+        lblGames.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
         ' 
         ' txtPublisher
         ' 
@@ -101,7 +103,7 @@ Partial Class frmResults
         ' 
         lblDeveloper.AutoSize = True
         lblDeveloper.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblDeveloper.Location = New Point(35, 115)
+        lblDeveloper.Location = New Point(35, 112)
         lblDeveloper.Margin = New Padding(4, 0, 4, 0)
         lblDeveloper.Name = "lblDeveloper"
         lblDeveloper.Size = New Size(77, 14)
@@ -111,49 +113,49 @@ Partial Class frmResults
         ' txtDeveloper
         ' 
         txtDeveloper.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtDeveloper.Location = New Point(35, 138)
+        txtDeveloper.Location = New Point(35, 135)
         txtDeveloper.Margin = New Padding(4, 3, 4, 3)
         txtDeveloper.Name = "txtDeveloper"
         txtDeveloper.ReadOnly = True
         txtDeveloper.Size = New Size(300, 29)
         txtDeveloper.TabIndex = 14
-        ' 
+        '
         ' lblSceneGroup
-        ' 
+        '
         lblSceneGroup.AutoSize = True
         lblSceneGroup.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblSceneGroup.Location = New Point(35, 194)
+        lblSceneGroup.Location = New Point(35, 189)
         lblSceneGroup.Margin = New Padding(4, 0, 4, 0)
         lblSceneGroup.Name = "lblSceneGroup"
         lblSceneGroup.Size = New Size(91, 14)
         lblSceneGroup.TabIndex = 17
         lblSceneGroup.Text = "Scene Group:"
-        ' 
+        '
         ' txtSceneGroup
-        ' 
+        '
         txtSceneGroup.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtSceneGroup.Location = New Point(35, 217)
+        txtSceneGroup.Location = New Point(35, 212)
         txtSceneGroup.Margin = New Padding(4, 3, 4, 3)
         txtSceneGroup.Name = "txtSceneGroup"
         txtSceneGroup.ReadOnly = True
         txtSceneGroup.Size = New Size(300, 29)
         txtSceneGroup.TabIndex = 16
-        ' 
+        '
         ' lblReleaseDate
-        ' 
+        '
         lblReleaseDate.AutoSize = True
         lblReleaseDate.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblReleaseDate.Location = New Point(35, 205)
+        lblReleaseDate.Location = New Point(35, 189)
         lblReleaseDate.Margin = New Padding(4, 0, 4, 0)
         lblReleaseDate.Name = "lblReleaseDate"
         lblReleaseDate.Size = New Size(98, 14)
         lblReleaseDate.TabIndex = 19
         lblReleaseDate.Text = "Release Date:"
-        ' 
+        '
         ' txtReleaseDate
-        ' 
+        '
         txtReleaseDate.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtReleaseDate.Location = New Point(35, 228)
+        txtReleaseDate.Location = New Point(35, 212)
         txtReleaseDate.Margin = New Padding(4, 3, 4, 3)
         txtReleaseDate.Name = "txtReleaseDate"
         txtReleaseDate.ReadOnly = True
@@ -172,10 +174,11 @@ Partial Class frmResults
         grpGameInfo.Margin = New Padding(4, 3, 4, 3)
         grpGameInfo.Name = "grpGameInfo"
         grpGameInfo.Padding = New Padding(4, 3, 4, 3)
-        grpGameInfo.Size = New Size(371, 285)
+        grpGameInfo.Size = New Size(371, 255)
         grpGameInfo.TabIndex = 22
         grpGameInfo.TabStop = False
         grpGameInfo.Text = "Game Information"
+        grpGameInfo.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         ' 
         ' grpCrackInfo
         ' 
@@ -185,14 +188,15 @@ Partial Class frmResults
         grpCrackInfo.Controls.Add(lblCrackDate)
         grpCrackInfo.Controls.Add(lblSceneGroup)
         grpCrackInfo.Controls.Add(txtSceneGroup)
-        grpCrackInfo.Location = New Point(503, 431)
+        grpCrackInfo.Location = New Point(503, 356)
         grpCrackInfo.Margin = New Padding(4, 3, 4, 3)
         grpCrackInfo.Name = "grpCrackInfo"
         grpCrackInfo.Padding = New Padding(4, 3, 4, 3)
-        grpCrackInfo.Size = New Size(371, 278)
+        grpCrackInfo.Size = New Size(371, 255)
         grpCrackInfo.TabIndex = 28
         grpCrackInfo.TabStop = False
         grpCrackInfo.Text = "Crack Information"
+        grpCrackInfo.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         ' 
         ' txtCrackStatus
         ' 
@@ -218,7 +222,7 @@ Partial Class frmResults
         ' txtCrackDate
         ' 
         txtCrackDate.Font = New Font("JetBrains Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        txtCrackDate.Location = New Point(35, 138)
+        txtCrackDate.Location = New Point(35, 135)
         txtCrackDate.Margin = New Padding(4, 3, 4, 3)
         txtCrackDate.Name = "txtCrackDate"
         txtCrackDate.ReadOnly = True
@@ -229,7 +233,7 @@ Partial Class frmResults
         ' 
         lblCrackDate.AutoSize = True
         lblCrackDate.Font = New Font("JetBrains Mono", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblCrackDate.Location = New Point(35, 115)
+        lblCrackDate.Location = New Point(35, 112)
         lblCrackDate.Margin = New Padding(4, 0, 4, 0)
         lblCrackDate.Name = "lblCrackDate"
         lblCrackDate.Size = New Size(84, 14)
@@ -246,6 +250,7 @@ Partial Class frmResults
         picGameCover.SizeMode = PictureBoxSizeMode.StretchImage
         picGameCover.TabIndex = 29
         picGameCover.TabStop = False
+        picGameCover.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Right
         ' 
         ' btnSteamPage
         ' 
@@ -271,6 +276,7 @@ Partial Class frmResults
         btnProceedToExport.TabIndex = 30
         btnProceedToExport.Text = "Proceed to Export"
         btnProceedToExport.UseVisualStyleBackColor = True
+        btnProceedToExport.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         ' 
         ' btnReturn
         ' 
@@ -282,6 +288,7 @@ Partial Class frmResults
         btnReturn.TabIndex = 31
         btnReturn.Text = "Return to Search"
         btnReturn.UseVisualStyleBackColor = True
+        btnReturn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         ' 
         ' lblSearchFilters
         ' 
@@ -292,6 +299,7 @@ Partial Class frmResults
         lblSearchFilters.Size = New Size(371, 16)
         lblSearchFilters.TabIndex = 32
         lblSearchFilters.TextAlign = ContentAlignment.MiddleCenter
+        lblSearchFilters.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         ' 
         ' Label2
         ' 
@@ -303,6 +311,7 @@ Partial Class frmResults
         Label2.TabIndex = 33
         Label2.Text = "Search Results"
         Label2.TextAlign = ContentAlignment.MiddleCenter
+        Label2.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         ' 
         ' txtGameSearch
         ' 
@@ -313,6 +322,7 @@ Partial Class frmResults
         txtGameSearch.PlaceholderText = "Search results..."
         txtGameSearch.Size = New Size(408, 23)
         txtGameSearch.TabIndex = 34
+        txtGameSearch.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         ' 
         ' btnThemeToggle
         ' 
@@ -325,6 +335,7 @@ Partial Class frmResults
         btnThemeToggle.TabIndex = 35
         btnThemeToggle.Text = "☀️"
         btnThemeToggle.UseVisualStyleBackColor = True
+        btnThemeToggle.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         ' 
         ' frmResults
         ' 

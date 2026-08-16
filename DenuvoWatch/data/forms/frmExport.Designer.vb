@@ -387,6 +387,8 @@ Partial Class frmExport
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(915, 509)
+        FormBorderStyle = FormBorderStyle.FixedSingle
+        MaximizeBox = False
         Controls.Add(btnThemeToggle)
         Controls.Add(gbExportSorting)
         Controls.Add(gbExportColumns)

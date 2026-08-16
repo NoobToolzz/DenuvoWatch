@@ -71,7 +71,8 @@ Partial Class frmLoader
         AutoScaleDimensions = New SizeF(7F, 16F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(519, 216)
-        Controls.Add(btnThemeToggle)
+        FormBorderStyle = FormBorderStyle.FixedSingle
+        MaximizeBox = False
         Controls.Add(rtbLoaderLogs)
         Controls.Add(lblStatus)
         Controls.Add(pgbLoader)

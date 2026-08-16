@@ -10,13 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="data\assets\DenuvoWatch.ico" />
+        <EmbeddedResource Include="data\assets\DenuvoWatch.ico"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Import Include="System.Data" />
-        <Import Include="System.Drawing" />
-        <Import Include="System.Windows.Forms" />
+        <Import Include="System.Data"/>
+        <Import Include="System.Drawing"/>
+        <Import Include="System.Windows.Forms"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -35,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
     </ItemGroup>
 
 </Project>

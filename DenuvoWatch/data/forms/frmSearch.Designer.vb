@@ -129,6 +129,9 @@ Partial Class frmSearch
         gbFilters.TabStop = False
         gbFilters.Text = "Filters"
         ' 
+        ' toolTipFilters
+        ' 
+        ' 
         ' btnThemeToggle
         ' 
         btnThemeToggle.FlatAppearance.BorderSize = 0
@@ -153,8 +156,10 @@ Partial Class frmSearch
         Controls.Add(tbQuery)
         Controls.Add(btnSearch)
         Controls.Add(lblTitle)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
         Name = "frmSearch"
         Text = "DenuvoWatch - Search"
         gbFilters.ResumeLayout(False)
