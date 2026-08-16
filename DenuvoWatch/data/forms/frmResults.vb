@@ -1,8 +1,6 @@
 ﻿Imports System.ComponentModel
-Imports System.Drawing
 Imports System.IO
 Imports System.Text.Json
-Imports System.Windows.Forms
 
 ' =============================================================================
 ' Form: frmResults
@@ -21,16 +19,16 @@ Public Class frmResults
     Private ReadOnly CoversDir As String = Path.Combine(AppContext.BaseDirectory, "data", "covers")
 
     ' Maps each ListBox index to its GameItem (or Nothing for headers)
-    Private itemGames As New List(Of GameItem)
+    Private ReadOnly itemGames As New List(Of GameItem)
     ' Which indices are category headers (for quick lookup)
-    Private headerIndices As New HashSet(Of Integer)
+    Private ReadOnly headerIndices As New HashSet(Of Integer)
 
     ' Header labels and their colors
     Private ReadOnly headerColors As New Dictionary(Of String, Color) From {
         {"Cracked", Color.Green},
         {"Hypervisor", Color.Goldenrod},
         {"Uncracked", Color.Red}
-    }
+        }
 
     ' Parse the JSON, fill the list, set the title
     Private Sub frmResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -38,11 +36,11 @@ Public Class frmResults
         ApplyTheme(Me)
 
         Dim options As New JsonSerializerOptions With {
-            .PropertyNameCaseInsensitive = True,
-            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-        }
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                }
 
-        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
+        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
         allGames = games.ToList()
 
@@ -51,10 +49,14 @@ Public Class frmResults
         FitLabelText(lblSearchFilters, filterText)
 
         Me.Text = If(Not String.IsNullOrWhiteSpace(filterText),
-            $"DenuvoWatch - Search Results | {filterText}",
-            "DenuvoWatch - Search Results")
+                     $"DenuvoWatch - Search Results | {filterText}",
+                     "DenuvoWatch - Search Results")
 
         PopulateListBox(games)
+
+        ' Lock the width so the user can only resize vertically, not horizontally
+        ' Don't let them shrink below the groupboxes
+        Me.MinimumSize = New Size(Me.Width, grpCrackInfo.Bottom + 60)
 
         ' Pick the first real game so the form isn't empty
         SelectFirstGame()
@@ -68,10 +70,22 @@ Public Class frmResults
         headerIndices.Clear()
 
         ' Group by crack status: Cracked → Hypervisor → Uncracked
-        Dim cracked = list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Cracked", StringComparison.OrdinalIgnoreCase)).ToList()
-        Dim hypervisor = list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase)).ToList()
-        Dim uncracked = list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase)).ToList()
-        Dim other = list.Where(Function(g) Not headerColors.Keys.Contains(If(g.CrackInfo?.CrackStatus, "Unknown"), StringComparer.OrdinalIgnoreCase)).ToList()
+        Dim cracked =
+                list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Cracked", StringComparison.OrdinalIgnoreCase)).
+                ToList()
+        Dim hypervisor =
+                list.Where(
+                    Function(g) g.CrackInfo?.CrackStatus?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase)).
+                ToList()
+        Dim uncracked =
+                list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase)) _
+                .ToList()
+        Dim other =
+                list.Where(
+                    Function(g) _
+                              Not _
+                              headerColors.Keys.Contains(If(g.CrackInfo?.CrackStatus, "Unknown"),
+                                                         StringComparer.OrdinalIgnoreCase)).ToList()
 
         If cracked.Count > 0 Then AddSection("Cracked", cracked)
         If hypervisor.Count > 0 Then AddSection("Hypervisor", hypervisor)
@@ -98,7 +112,7 @@ Public Class frmResults
         ' Figure out how many = fit on each side
         Dim textSize = TextRenderer.MeasureText(header & " ", lbGames.Font)
         Dim availableWidth = lbGames.ClientSize.Width - 6  ' account for scrollbar
-        Dim equalsCount = Math.Max(5, (availableWidth - textSize.Width) \ 2 \ 11)  ' each = is ~11px wide
+        Dim equalsCount = Math.Max(5, (availableWidth - textSize.Width)\2\11)  ' each = is ~11px wide
         Return New String("="c, equalsCount) & " " & header & " " & New String("="c, equalsCount)
     End Function
 
@@ -126,7 +140,7 @@ Public Class frmResults
         If isSelected Then
             e.DrawBackground()
         Else
-            Dim bgColor = If(Utils.IsDarkTheme, Utils.DarkSurface, SystemColors.Window)
+            Dim bgColor = If(IsDarkTheme, DarkSurface, SystemColors.Window)
             Using brush As New SolidBrush(bgColor)
                 e.Graphics.FillRectangle(brush, e.Bounds)
             End Using
@@ -142,17 +156,18 @@ Public Class frmResults
 
             Using brush As New SolidBrush(drawColor)
                 Dim sf As New StringFormat With {
-                    .Alignment = StringAlignment.Center,
-                    .LineAlignment = StringAlignment.Center
-                }
+                        .Alignment = StringAlignment.Center,
+                        .LineAlignment = StringAlignment.Center
+                        }
                 e.Graphics.DrawString(headerText, lbGames.Font, brush, e.Bounds, sf)
             End Using
         Else
             ' Draw a normal game title
             Dim text = lbGames.Items(e.Index).ToString()
-            Dim textColor = If(isSelected, SystemColors.HighlightText, If(Utils.IsDarkTheme, Utils.DarkText, SystemColors.ControlText))
+            Dim textColor =
+                    If(isSelected, SystemColors.HighlightText, If(IsDarkTheme, DarkText, SystemColors.ControlText))
             TextRenderer.DrawText(e.Graphics, text, lbGames.Font, e.Bounds, textColor,
-                TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
+                                  TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
         End If
 
         e.DrawFocusRectangle()
@@ -184,13 +199,13 @@ Public Class frmResults
         Dim crackDateRel = If(g.CrackInfo?.CrackDateRelative, "")
         If Not String.IsNullOrWhiteSpace(crackDate) Then
             txtCrackDate.Text = If(String.IsNullOrWhiteSpace(crackDateRel),
-                crackDate, $"{crackDate} ({crackDateRel})")
+                                   crackDate, $"{crackDate} ({crackDateRel})")
         Else
             txtCrackDate.Text = "—"
         End If
 
         txtSceneGroup.Text = If(Not String.IsNullOrWhiteSpace(g.CrackInfo?.SceneGroup),
-            g.CrackInfo.SceneGroup, "—")
+                                g.CrackInfo.SceneGroup, "—")
 
         LoadCover(g.SortTitle)
     End Sub
@@ -279,11 +294,11 @@ Public Class frmResults
     ' Send the data to the export form
     Private Sub btnProceedToExport_Click(sender As Object, e As EventArgs) Handles btnProceedToExport.Click
         NavigateTo(Me, Function()
-                           Dim exportForm As New frmExport()
-                           exportForm.ResultsJson = ResultsJson
-                           exportForm.SearchFilters = SearchFilters
-                           Return exportForm
-                       End Function)
+            Dim exportForm As New frmExport()
+            exportForm.ResultsJson = ResultsJson
+            exportForm.SearchFilters = SearchFilters
+            Return exportForm
+        End Function)
     End Sub
 
     ' Open the Steam page in the browser
@@ -297,7 +312,8 @@ Public Class frmResults
             Return
         End If
 
-        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") With {.UseShellExecute = True})
+        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") _
+                         With {.UseShellExecute = True})
     End Sub
 
     Private Sub grpGameInfo_Enter(sender As Object, e As EventArgs) Handles grpGameInfo.Enter
@@ -308,7 +324,19 @@ Public Class frmResults
         ToggleTheme(Me)
     End Sub
 
-    Private Sub lblSearchFilters_Click(sender As Object, e As EventArgs)
+    ' When the form resizes, rebuild the headers so the ='s adapt to the new width
+    Private Sub frmResults_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        If lbGames Is Nothing OrElse lbGames.Items.Count = 0 Then Return
 
+        ' Rebuild the header text for each header index with the new listbox width
+        For Each idx In headerIndices
+            Dim category = ExtractCategory(lbGames.Items(idx).ToString())
+            If Not String.IsNullOrEmpty(category) Then
+                lbGames.Items(idx) = BuildHeaderText(category)
+            End If
+        Next
+    End Sub
+
+    Private Sub lblSearchFilters_Click(sender As Object, e As EventArgs)
     End Sub
 End Class

@@ -1,7 +1,8 @@
-Imports System.Linq
 Imports System.Net.Http
+Imports System.Text
 Imports System.Text.Json
 Imports System.Text.Json.Serialization
+Imports System.Text.RegularExpressions
 
 ' =============================================================================
 ' Module: GamesData
@@ -23,11 +24,11 @@ Public Module GamesData
             Dim json = client.GetStringAsync(GamesJsonUrl).Result
 
             Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            }
+                    .PropertyNameCaseInsensitive = True,
+                    .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                    }
 
-            Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
+            Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
             AllGames = If(root?.Games, New List(Of GameItem)())
 
             Console.WriteLine($"Loaded {AllGames.Count} games")
@@ -83,17 +84,32 @@ Public Module GamesData
 
         If Not String.IsNullOrWhiteSpace(developers) Then
             Dim list = developers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(d) String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(d) _
+                                            String.Equals(g.GameInfo?.Developer, d, StringComparison.OrdinalIgnoreCase)))
         End If
 
         If Not String.IsNullOrWhiteSpace(publishers) Then
             Dim list = publishers.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(p) String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(p) _
+                                            String.Equals(g.GameInfo?.Publisher, p, StringComparison.OrdinalIgnoreCase)))
         End If
 
         If Not String.IsNullOrWhiteSpace(sceneGroups) Then
             Dim list = sceneGroups.Split(","c).Select(Function(x) x.Trim()).Where(Function(x) x <> "").ToList()
-            result = result.Where(Function(g) list.Any(Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
+            result =
+                result.Where(
+                    Function(g) _
+                                list.Any(
+                                    Function(s) _
+                                            String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
         End If
 
         Return result.ToList()
@@ -102,17 +118,18 @@ Public Module GamesData
     ' Direct AppID lookup - straight equality, no fuzzy matching needed.
     Public Function FilterByAppId(appId As String) As List(Of GameItem)
         Dim id = appId.Trim()
-        Return AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
+        Return _
+            AllGames.Where(Function(g) String.Equals(g.GameInfo?.AppId, id, StringComparison.OrdinalIgnoreCase)).ToList()
     End Function
 
     ' Throw away anything that isn't a letter, number, or space
     Private Function NormalizeForSearch(s As String) As String
         If String.IsNullOrWhiteSpace(s) Then Return ""
-        Dim sb As New Text.StringBuilder()
+        Dim sb As New StringBuilder()
         For Each c In s.ToLowerInvariant()
             If Char.IsLetterOrDigit(c) OrElse c = " "c Then sb.Append(c)
         Next
-        Return System.Text.RegularExpressions.Regex.Replace(sb.ToString(), "\s+", " ").Trim()
+        Return Regex.Replace(sb.ToString(), "\s+", " ").Trim()
     End Function
 End Module
 

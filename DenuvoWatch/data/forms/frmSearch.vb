@@ -32,13 +32,19 @@ Public Class frmSearch
             For Each ctrl In gbFilters.Controls
                 ctrl.Enabled = False
             Next
-            ' Tooltip goes on the GroupBox since disabled controls don't get mouse hover
+            ' Tooltip on the GroupBox and on each combobox inside it
             toolTipFilters.SetToolTip(gbFilters, "AppID detected in search query. Remove it to re-enable filters.")
+            toolTipFilters.SetToolTip(cbDeveloper, "AppID detected in search query. Remove it to re-enable filters.")
+            toolTipFilters.SetToolTip(cbPublisher, "AppID detected in search query. Remove it to re-enable filters.")
+            toolTipFilters.SetToolTip(cbSceneGroup, "AppID detected in search query. Remove it to re-enable filters.")
         Else
             For Each ctrl In gbFilters.Controls
                 ctrl.Enabled = True
             Next
             toolTipFilters.SetToolTip(gbFilters, Nothing)
+            toolTipFilters.SetToolTip(cbDeveloper, Nothing)
+            toolTipFilters.SetToolTip(cbPublisher, Nothing)
+            toolTipFilters.SetToolTip(cbSceneGroup, Nothing)
         End If
     End Sub
 
@@ -117,20 +123,20 @@ Public Class frmSearch
     ' Helper to avoid repeating NavigateTo boilerplate.
     Private Sub NavigateToResults(json As String, filterDisplay As String)
         NavigateTo(Me, Function()
-                           Dim results As New frmResults()
-                           results.ResultsJson = json
-                           results.SearchFilters = filterDisplay
-                           Return results
-                       End Function)
+            Dim results As New frmResults()
+            results.ResultsJson = json
+            results.SearchFilters = filterDisplay
+            Return results
+        End Function)
     End Sub
 
     ' Deserialises the API JSON into a list of GameItem.
     Private Function ParseResultsJson(json As String) As List(Of GameItem)
         Dim options As New JsonSerializerOptions With {
-            .PropertyNameCaseInsensitive = True,
-            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-        }
-        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                }
+        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
         Return If(root?.Games, New List(Of GameItem)())
     End Function
 
@@ -182,9 +188,5 @@ Public Class frmSearch
     ' Toggle between dark and light theme
     Private Sub btnThemeToggle_Click(sender As Object, e As EventArgs) Handles btnThemeToggle.Click
         ToggleTheme(Me)
-    End Sub
-
-    Private Sub lblTitle_Click(sender As Object, e As EventArgs) Handles lblTitle.Click
-
     End Sub
 End Class

@@ -1,4 +1,3 @@
-Imports System.Drawing
 Imports System.Drawing.Drawing2D
 
 ' =============================================================================
@@ -6,9 +5,8 @@ Imports System.Drawing.Drawing2D
 ' Moving between forms, starting/stopping the server, styling buttons, and theming.
 ' =============================================================================
 Module Utils
-
-    ' Theme state - default to dark
-    Public IsDarkTheme As Boolean = True
+    ' Theme state — default to light
+    Public IsDarkTheme As Boolean = False
 
     ' Dark theme palette
     Public ReadOnly DarkBg As Color = ColorTranslator.FromHtml("#0a0a0c")
@@ -94,7 +92,7 @@ Module Utils
     Private Sub RoundButtonCorners(btn As Button, radius As Integer)
         Dim path As New GraphicsPath()
         Dim r = New Rectangle(0, 0, btn.Width, btn.Height)
-        Dim d = radius * 2
+        Dim d = radius*2
         path.AddArc(r.X, r.Y, d, d, 180, 90)
         path.AddLine(r.X + d, r.Y, r.Right - d, r.Y)
         path.AddArc(r.Right - d, r.Y, d, d, 270, 90)
@@ -227,11 +225,11 @@ Module Utils
         cbPublisher.Items.Clear()
         cbSceneGroup.Items.Clear()
 
-        For Each d In GamesData.GetUniqueDevelopers() : cbDeveloper.Items.Add(d)
+        For Each d In GetUniqueDevelopers() : cbDeveloper.Items.Add(d)
         Next
-        For Each p In GamesData.GetUniquePublishers() : cbPublisher.Items.Add(p)
+        For Each p In GetUniquePublishers() : cbPublisher.Items.Add(p)
         Next
-        For Each s In GamesData.GetUniqueSceneGroups() : cbSceneGroup.Items.Add(s)
+        For Each s In GetUniqueSceneGroups() : cbSceneGroup.Items.Add(s)
         Next
     End Sub
 End Module

@@ -14,7 +14,7 @@ Public Module WebServer
     Private ReadOnly jsonOpts As New JsonSerializerOptions With {
         .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         .WriteIndented = False
-    }
+        }
 
     ' Set up the web server on localhost only
     Friend Function CreateWebApp() As WebApplication
@@ -41,13 +41,13 @@ Public Module WebServer
         Dim games As List(Of GameItem)
 
         If Not String.IsNullOrWhiteSpace(appid) Then
-            games = GamesData.FilterByAppId(appid)
+            games = FilterByAppId(appid)
         Else
             Dim query = ctx.Request.Query("q").ToString()
             Dim developer = ctx.Request.Query("developer").ToString()
             Dim publisher = ctx.Request.Query("publisher").ToString()
             Dim sceneGroup = ctx.Request.Query("scene_group").ToString()
-            games = GamesData.FilterGames(query, developer, publisher, sceneGroup)
+            games = FilterGames(query, developer, publisher, sceneGroup)
         End If
 
         Dim resultObj = New With {.games = games}

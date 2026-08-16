@@ -1,9 +1,8 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
-Imports System.Linq
+Imports System.Security
 Imports System.Text
 Imports System.Text.Json
-Imports System.Windows.Forms
 
 ' =============================================================================
 ' Form: frmExport
@@ -18,24 +17,31 @@ Public Class frmExport
 
     Private games As List(Of GameItem)
 
-    Private ReadOnly columnKeys As String() = {"title", "developer", "publisher", "release_date", "crack_status", "crack_date", "scene_group"}
-    Private ReadOnly columnLabels As String() = {"Title", "Developer", "Publisher", "Release Date", "Crack Status", "Crack Date", "Scene Group"}
+    Private ReadOnly _
+        columnKeys As String() =
+            {"title", "developer", "publisher", "release_date", "crack_status", "crack_date", "scene_group"}
 
-    Private formatRadios As New List(Of RadioButton)
-    Private columnChecks As New List(Of CheckBox)
-    Private sortRadios As New List(Of RadioButton)
+    Private ReadOnly _
+        columnLabels As String() =
+            {"Title", "Developer", "Publisher", "Release Date", "Crack Status", "Crack Date", "Scene Group"}
+
+    Private ReadOnly formatRadios As New List(Of RadioButton)
+    Private ReadOnly columnChecks As New List(Of CheckBox)
+    Private ReadOnly sortRadios As New List(Of RadioButton)
 
     ' Parse JSON, group up the controls, style buttons, show the preview
     Private Sub frmExport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         formatRadios.AddRange({rbFormatText, rbFormatCSV, rbFormatJSON, rbFormatHTML, rbFormatMarkdown, rbFormatXML})
-        columnChecks.AddRange({cbColTitle, cbColDeveloper, cbColPublisher, cbColReleaseDate, cbColCrackStatus, cbColCrackDate, cbColSceneGroup})
+        columnChecks.AddRange(
+            {cbColTitle, cbColDeveloper, cbColPublisher, cbColReleaseDate, cbColCrackStatus, cbColCrackDate,
+             cbColSceneGroup})
         sortRadios.AddRange({rbSortNone, rbSortTitleAZ, rbSortTitleZA, rbSortCrackStatus, rbSortReleaseDate})
 
         Dim options As New JsonSerializerOptions With {
-            .PropertyNameCaseInsensitive = True,
-            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-        }
-        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                }
+        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
 
         StyleFormButtons(Me)
@@ -190,9 +196,9 @@ Public Class frmExport
         If cols.Count = 0 OrElse games.Count = 0 Then Return "{}"
 
         Dim options As New JsonSerializerOptions With {
-            .WriteIndented = True,
-            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-        }
+                .WriteIndented = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                }
 
         Dim rows As New List(Of Dictionary(Of String, String))
         For Each g In games
@@ -232,7 +238,8 @@ Public Class frmExport
         sb.AppendLine("    .filters { color:#9a9aa3; font-size:13px; margin-bottom:20px; }")
         sb.AppendLine("    .meta { color:#5a5a63; font-size:11px; margin-bottom:16px; }")
         sb.AppendLine("    table { border-collapse:collapse; width:100%; font-size:13px; }")
-        sb.AppendLine("    th { background:#1a1a2e; color:#e0e0e0; border:1px solid #34343c; padding:8px 12px; text-align:left; }")
+        sb.AppendLine(
+            "    th { background:#1a1a2e; color:#e0e0e0; border:1px solid #34343c; padding:8px 12px; text-align:left; }")
         sb.AppendLine("    td { border:1px solid #24242a; padding:8px 12px; color:#ccc; }")
         sb.AppendLine("    tr:nth-child(even) td { background:#111114; }")
         sb.AppendLine("    .cracked { color:#34d399; font-weight:600; }")
@@ -246,7 +253,8 @@ Public Class frmExport
         sb.AppendLine("<body>")
         sb.AppendLine("  <h1>DenuvoWatch Export</h1>")
         sb.AppendLine($"  <p class='filters'><strong>Filters:</strong> {GetFilterHeader()}</p>")
-        sb.AppendLine($"  <p class='meta'>Exported {DateTime.Now.ToString("yyyy-MM-dd HH:mm")} · {games.Count} game(s)</p>")
+        sb.AppendLine(
+            $"  <p class='meta'>Exported {DateTime.Now.ToString("yyyy-MM-dd HH:mm")} · {games.Count} game(s)</p>")
         sb.AppendLine("  <table>")
 
         sb.AppendLine("    <tr>")
@@ -265,7 +273,8 @@ Public Class frmExport
                 If c = "Crack Status" Then
                     If val?.Equals("Cracked", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='cracked'"
                     If val?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='uncracked'"
-                    If val?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase) Then cssClass = " class='hypervisor'"
+                    If val?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase) Then _
+                        cssClass = " class='hypervisor'"
                 End If
 
                 ' Link the AppID in the title
@@ -357,7 +366,7 @@ Public Class frmExport
         Dim sb As New StringBuilder()
         sb.AppendLine("<?xml version='1.0' encoding='UTF-8'?>")
         sb.AppendLine("<denuvowatch>")
-        sb.AppendLine($"  <filters>{System.Security.SecurityElement.Escape(GetFilterHeader())}</filters>")
+        sb.AppendLine($"  <filters>{SecurityElement.Escape(GetFilterHeader())}</filters>")
         sb.AppendLine($"  <exported_at>{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ")}</exported_at>")
         sb.AppendLine($"  <count>{games.Count}</count>")
         sb.AppendLine("  <games>")
@@ -366,10 +375,10 @@ Public Class frmExport
             sb.AppendLine("    <game>")
             For Each c In cols
                 Dim key = columnKeys(Array.IndexOf(columnLabels, c))
-                sb.AppendLine($"      <{key}>{System.Security.SecurityElement.Escape(GetFieldValue(g, c))}</{key}>")
+                sb.AppendLine($"      <{key}>{SecurityElement.Escape(GetFieldValue(g, c))}</{key}>")
             Next
-            sb.AppendLine($"      <appid>{System.Security.SecurityElement.Escape(If(g.GameInfo?.AppId, ""))}</appid>")
-            sb.AppendLine($"      <steam_link>{System.Security.SecurityElement.Escape(GetSteamUrl(g))}</steam_link>")
+            sb.AppendLine($"      <appid>{SecurityElement.Escape(If(g.GameInfo?.AppId, ""))}</appid>")
+            sb.AppendLine($"      <steam_link>{SecurityElement.Escape(GetSteamUrl(g))}</steam_link>")
             sb.AppendLine("    </game>")
         Next
 

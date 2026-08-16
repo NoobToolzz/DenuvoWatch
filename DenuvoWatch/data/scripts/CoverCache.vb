@@ -1,7 +1,5 @@
-Imports System.Drawing
 Imports System.IO
 Imports System.Net.Http
-Imports System.Windows.Forms
 
 ' =============================================================================
 ' Module: CoverCache
@@ -47,28 +45,29 @@ Public Module CoverCache
     End Sub
 
     ' Load game data, make folders, then keep checking and downloading until everything's good
-    Public Function RunCoverCaching(pgb As ProgressBar, lbl As Label, rtb As RichTextBox, ByRef failedCount As Integer) As Boolean
+    Public Function RunCoverCaching(pgb As ProgressBar, lbl As Label, rtb As RichTextBox, ByRef failedCount As Integer) _
+        As Boolean
         failedCount = 0
 
         LogRichText(rtb, "▸ Initializing cover cache...", Color.Gray)
 
         LogRichText(rtb, "→ Fetching game data from GitHub...")
         UpdateStatus(lbl, "Fetching game data...")
-        GamesData.LoadGames()
+        LoadGames()
 
-        If GamesData.AllGames.Count = 0 Then
+        If AllGames.Count = 0 Then
             LogRichText(rtb, "✗ Failed to load game data.", Color.Red)
             UpdateStatus(lbl, "Failed to load game data.")
             Return False
         End If
 
-        LogRichText(rtb, $"✓ Loaded {GamesData.AllGames.Count} games", Color.Green)
+        LogRichText(rtb, $"✓ Loaded {AllGames.Count} games", Color.Green)
 
         ' Skip games without a sort_title or cover_url
-        Dim cacheable = GamesData.AllGames.Where(
+        Dim cacheable = AllGames.Where(
             Function(g) Not String.IsNullOrWhiteSpace(g.SortTitle) AndAlso
-                         Not String.IsNullOrWhiteSpace(g.CoverUrl)
-        ).ToList()
+                        Not String.IsNullOrWhiteSpace(g.CoverUrl)
+            ).ToList()
 
         If cacheable.Count = 0 Then
             LogRichText(rtb, "✗ No cacheable covers found.", Color.Red)
@@ -96,8 +95,11 @@ Public Module CoverCache
 
             If round > MaxRounds Then
                 failedCount = missing.Count
-                LogRichText(rtb, $"✗ Verification incomplete - {missing.Count} cover(s) failed after {MaxRounds} attempts.", Color.Red)
-                UpdateStatus(lbl, $"Verification incomplete - {missing.Count} cover(s) failed after {MaxRounds} attempts.")
+                LogRichText(rtb,
+                            $"✗ Verification incomplete - {missing.Count} cover(s) failed after {MaxRounds} attempts.",
+                            Color.Red)
+                UpdateStatus(lbl,
+                             $"Verification incomplete - {missing.Count} cover(s) failed after {MaxRounds} attempts.")
                 Return False
             End If
 
@@ -121,7 +123,8 @@ Public Module CoverCache
     End Sub
 
     ' See which covers are missing or broken
-    Private Function VerifyCovers(games As List(Of GameItem), pgb As ProgressBar, lbl As Label, rtb As RichTextBox) As List(Of GameItem)
+    Private Function VerifyCovers(games As List(Of GameItem), pgb As ProgressBar, lbl As Label, rtb As RichTextBox) _
+        As List(Of GameItem)
         Dim missing As New List(Of GameItem)
         Dim total = games.Count
         Dim valid = 0
@@ -148,7 +151,8 @@ Public Module CoverCache
     End Function
 
     ' Download 8 at a time. Broken ones get caught on the next pass
-    Private Sub DownloadCovers(games As List(Of GameItem), pgb As ProgressBar, lbl As Label, rtb As RichTextBox, attempt As Integer)
+    Private Sub DownloadCovers(games As List(Of GameItem), pgb As ProgressBar, lbl As Label, rtb As RichTextBox,
+                               attempt As Integer)
         Dim total = games.Count
         Dim completed = 0
         Dim succeeded = 0

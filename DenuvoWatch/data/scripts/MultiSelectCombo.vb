@@ -1,5 +1,4 @@
-Imports System.Drawing
-Imports System.Windows.Forms
+
 
 ' =============================================================================
 ' Class: MultiSelectCombo
@@ -29,19 +28,19 @@ Public Class MultiSelectCombo
         checkedList = New CheckedListBox() With {
             .CheckOnClick = True,
             .BorderStyle = BorderStyle.None
-        }
+            }
 
         ' The popup is a ToolStripDropDown so it doesn't steal focus
         host = New ToolStripControlHost(checkedList) With {
             .AutoSize = False,
             .Margin = New Padding(0, 0, 0, 0),
             .Padding = New Padding(0, 0, 0, 0)
-        }
+            }
 
         dropdown = New ToolStripDropDown() With {
             .AutoSize = False,
             .DropShadowEnabled = True
-        }
+            }
         dropdown.Items.Add(host)
 
         AddHandler checkedList.ItemCheck, Sub(s, e)
@@ -72,9 +71,9 @@ Public Class MultiSelectCombo
         End If
 
         ' Apply theme to the popup list
-        If Utils.IsDarkTheme Then
-            checkedList.BackColor = Utils.DarkSurface
-            checkedList.ForeColor = Utils.DarkText
+        If IsDarkTheme Then
+            checkedList.BackColor = DarkSurface
+            checkedList.ForeColor = DarkText
         Else
             checkedList.BackColor = SystemColors.Window
             checkedList.ForeColor = SystemColors.ControlText
@@ -82,7 +81,7 @@ Public Class MultiSelectCombo
 
         ' Cap at 300px tall so it scrolls if the list is long
         Dim itemHeight As Integer = checkedList.GetItemHeight(0)
-        Dim listHeight = Math.Min(checkedList.Items.Count * (itemHeight + 4) + 4, 300)
+        Dim listHeight = Math.Min(checkedList.Items.Count*(itemHeight + 4) + 4, 300)
         Dim listWidth = combo.Width
 
         checkedList.Width = listWidth
