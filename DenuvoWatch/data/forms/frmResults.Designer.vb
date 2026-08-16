@@ -342,6 +342,7 @@ Partial Class frmResults
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(1323, 832)
+        MaximizeBox = False
         Controls.Add(btnThemeToggle)
         Controls.Add(Label2)
         Controls.Add(lblSearchFilters)

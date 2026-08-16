@@ -30,7 +30,7 @@ Public Class frmResults
         {"Cracked", Color.Green},
         {"Hypervisor", Color.Goldenrod},
         {"Uncracked", Color.Red}
-        }
+    }
 
     ' Parse the JSON, fill the list, set the title
     Private Sub frmResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -38,11 +38,11 @@ Public Class frmResults
         ApplyTheme(Me)
 
         Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-                }
+            .PropertyNameCaseInsensitive = True,
+            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        }
 
-        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
+        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
         allGames = games.ToList()
 
@@ -59,6 +59,7 @@ Public Class frmResults
         ' Lock the width so the user can only resize vertically, not horizontally
         ' Don't let them shrink below the groupboxes
         Me.MinimumSize = New Size(Me.Width, grpCrackInfo.Bottom + 60)
+        Me.MaximumSize = New Size(Me.Width, Screen.PrimaryScreen.Bounds.Height)
 
         ' Pick the first real game so the form isn't empty
         SelectFirstGame()
@@ -72,22 +73,15 @@ Public Class frmResults
         headerIndices.Clear()
 
         ' Group by crack status: Cracked → Hypervisor → Uncracked
-        Dim cracked =
-                list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Cracked", StringComparison.OrdinalIgnoreCase)).
-                ToList()
-        Dim hypervisor =
-                list.Where(
-                    Function(g) g.CrackInfo?.CrackStatus?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase)).
-                ToList()
-        Dim uncracked =
-                list.Where(Function(g) g.CrackInfo?.CrackStatus?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase)) _
-                .ToList()
-        Dim other =
-                list.Where(
-                    Function(g) _
-                              Not _
-                              headerColors.Keys.Contains(If(g.CrackInfo?.CrackStatus, "Unknown"),
-                                                         StringComparer.OrdinalIgnoreCase)).ToList()
+        Dim cracked = list.Where(
+            Function(g) g.CrackInfo?.CrackStatus?.Equals("Cracked", StringComparison.OrdinalIgnoreCase)).ToList()
+        Dim hypervisor = list.Where(
+            Function(g) g.CrackInfo?.CrackStatus?.Equals("Hypervisor", StringComparison.OrdinalIgnoreCase)).ToList()
+        Dim uncracked = list.Where(
+            Function(g) g.CrackInfo?.CrackStatus?.Equals("Uncracked", StringComparison.OrdinalIgnoreCase)).ToList()
+        Dim other = list.Where(
+            Function(g) Not headerColors.Keys.Contains(
+                If(g.CrackInfo?.CrackStatus, "Unknown"), StringComparer.OrdinalIgnoreCase)).ToList()
 
         If cracked.Count > 0 Then AddSection("Cracked", cracked)
         If hypervisor.Count > 0 Then AddSection("Hypervisor", hypervisor)
@@ -168,16 +162,16 @@ Public Class frmResults
             Using headerFont As New Font(lbGames.Font.FontFamily, lbGames.Font.Size + 2, FontStyle.Bold),
                 brush As New SolidBrush(drawColor)
                 Dim sf As New StringFormat With {
-                        .Alignment = StringAlignment.Center,
-                        .LineAlignment = StringAlignment.Center
-                        }
+                    .Alignment = StringAlignment.Center,
+                    .LineAlignment = StringAlignment.Center
+                }
                 e.Graphics.DrawString(headerText, headerFont, brush, e.Bounds, sf)
             End Using
         Else
             ' Draw a normal game title
             Dim text = lbGames.Items(e.Index).ToString()
             Dim textColor =
-                    If(isSelected, SystemColors.HighlightText, If(IsDarkTheme, DarkText, SystemColors.ControlText))
+                If(isSelected, SystemColors.HighlightText, If(IsDarkTheme, DarkText, SystemColors.ControlText))
             TextRenderer.DrawText(e.Graphics, text, lbGames.Font, e.Bounds, textColor,
                                   TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
         End If
@@ -325,8 +319,7 @@ Public Class frmResults
             Return
         End If
 
-        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") _
-                         With {.UseShellExecute = True})
+        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") With {.UseShellExecute = True})
     End Sub
 
     Private Sub grpGameInfo_Enter(sender As Object, e As EventArgs) Handles grpGameInfo.Enter
