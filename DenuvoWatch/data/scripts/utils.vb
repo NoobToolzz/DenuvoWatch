@@ -1,4 +1,5 @@
 Imports System.Drawing.Drawing2D
+Imports System.Runtime.InteropServices
 
 ' =============================================================================
 ' Module: Utils
@@ -13,6 +14,22 @@ Module Utils
     Public ReadOnly DarkSurface As Color = ColorTranslator.FromHtml("#393941")
     Public ReadOnly DarkBorder As Color = ColorTranslator.FromHtml("#4a4a55")
     Public ReadOnly DarkText As Color = ColorTranslator.FromHtml("#dcdce0")
+
+    <DllImport("uxtheme.dll", CharSet:=CharSet.Unicode, SetLastError:=True)>
+    Private Function SetWindowTheme(hwnd As IntPtr, pszSubAppName As String, pszSubIdList As String) As Integer
+    End Function
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    Private Function SendMessage(hWnd As IntPtr, msg As Integer, wParam As IntPtr, lParam As IntPtr) As IntPtr
+    End Function
+
+    Private Const WM_THEMECHANGED As Integer = &H31A
+
+    Public Sub ApplyScrollbarTheme(ctrl As Control, dark As Boolean)
+        If Not ctrl.IsHandleCreated Then Return
+        SetWindowTheme(ctrl.Handle, If(dark, "DarkMode_Explorer", "Explorer"), "ScrollBar")
+        SendMessage(ctrl.Handle, WM_THEMECHANGED, IntPtr.Zero, IntPtr.Zero)
+    End Sub
 
     ' Hide me, show the next form, close me when it closes
     Public Sub NavigateTo(current As Form, createNext As Func(Of Form))
@@ -141,6 +158,11 @@ Module Utils
             ctrl.BackColor = If(dark, DarkBg, SystemColors.Control)
             ctrl.ForeColor = If(dark, DarkText, SystemColors.ControlText)
 
+        ElseIf TypeOf ctrl Is RichTextBox Then
+            ctrl.BackColor = If(dark, DarkSurface, SystemColors.Window)
+            ctrl.ForeColor = If(dark, DarkText, SystemColors.WindowText)
+            ApplyScrollbarTheme(ctrl, dark)
+
         ElseIf TypeOf ctrl Is TextBoxBase Then
             ctrl.BackColor = If(dark, DarkSurface, SystemColors.Window)
             ctrl.ForeColor = If(dark, DarkText, SystemColors.WindowText)
@@ -156,6 +178,7 @@ Module Utils
         ElseIf TypeOf ctrl Is ListBox Then
             ctrl.BackColor = If(dark, DarkSurface, SystemColors.Window)
             ctrl.ForeColor = If(dark, DarkText, SystemColors.WindowText)
+            ApplyScrollbarTheme(ctrl, dark)
 
         ElseIf TypeOf ctrl Is Button Then
             Dim btn = DirectCast(ctrl, Button)
@@ -225,11 +248,14 @@ Module Utils
         cbPublisher.Items.Clear()
         cbSceneGroup.Items.Clear()
 
-        For Each d In GetUniqueDevelopers() : cbDeveloper.Items.Add(d)
+        For Each d In GetUniqueDevelopers()
+            cbDeveloper.Items.Add(d)
         Next
-        For Each p In GetUniquePublishers() : cbPublisher.Items.Add(p)
+        For Each p In GetUniquePublishers()
+            cbPublisher.Items.Add(p)
         Next
-        For Each s In GetUniqueSceneGroups() : cbSceneGroup.Items.Add(s)
+        For Each s In GetUniqueSceneGroups()
+            cbSceneGroup.Items.Add(s)
         Next
     End Sub
 End Module
