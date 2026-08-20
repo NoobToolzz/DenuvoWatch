@@ -26,19 +26,19 @@ Public Class MultiSelectCombo
         checkedList = New CheckedListBox() With {
             .CheckOnClick = True,
             .BorderStyle = BorderStyle.None
-        }
+            }
 
         ' The popup is a ToolStripDropDown so it doesn't steal focus
         host = New ToolStripControlHost(checkedList) With {
             .AutoSize = False,
             .Margin = New Padding(0, 0, 0, 0),
             .Padding = New Padding(0, 0, 0, 0)
-        }
+            }
 
         dropdown = New ToolStripDropDown() With {
             .AutoSize = False,
             .DropShadowEnabled = True
-        }
+            }
         dropdown.Items.Add(host)
 
         AddHandler checkedList.ItemCheck, Sub(s, e)
@@ -127,6 +127,21 @@ Public Class MultiSelectCombo
             checkedList.SetItemChecked(i, False)
         Next
         combo.Text = placeholderText
+    End Sub
+
+    ' Check items matching a comma-separated list (used when restoring saved filter state)
+    Public Sub SetCheckedItems(items As String)
+        Dim list = If(items, "").Split(","c).
+                Select(Function(x) x.Trim()).
+                Where(Function(x) x <> "").
+                ToList()
+        For i = 0 To checkedList.Items.Count - 1
+            Dim itemText = checkedList.Items(i).ToString().Trim()
+            checkedList.SetItemChecked(i,
+                                       list.Any(
+                                           Function(x) String.Equals(x, itemText, StringComparison.OrdinalIgnoreCase)))
+        Next
+        UpdateComboText()
     End Sub
 
     Public Function HasSelection() As Boolean
