@@ -34,7 +34,12 @@ Partial Class frmSearch
         gbFilters = New GroupBox()
         toolTipFilters = New ToolTip(components)
         btnThemeToggle = New Button()
+        fbFiltersPrice = New GroupBox()
+        cbPriceCurrency = New ComboBox()
+        cbPriceRange = New ComboBox()
+        cbPriceOperator = New ComboBox()
         gbFilters.SuspendLayout()
+        fbFiltersPrice.SuspendLayout()
         SuspendLayout()
         ' 
         ' lblTitle
@@ -88,7 +93,7 @@ Partial Class frmSearch
         ' btnSearch
         ' 
         btnSearch.Font = New Font("JetBrains Mono", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        btnSearch.Location = New Point(352, 179)
+        btnSearch.Location = New Point(362, 210)
         btnSearch.Margin = New Padding(4, 3, 4, 3)
         btnSearch.Name = "btnSearch"
         btnSearch.Size = New Size(208, 57)
@@ -119,18 +124,16 @@ Partial Class frmSearch
         ' 
         ' gbFilters
         ' 
+        gbFilters.Controls.Add(fbFiltersPrice)
         gbFilters.Controls.Add(cbPublisher)
         gbFilters.Controls.Add(cbDeveloper)
         gbFilters.Controls.Add(cbSceneGroup)
         gbFilters.Location = New Point(39, 110)
         gbFilters.Name = "gbFilters"
-        gbFilters.Size = New Size(267, 187)
+        gbFilters.Size = New Size(267, 250)
         gbFilters.TabIndex = 7
         gbFilters.TabStop = False
         gbFilters.Text = "Filters"
-        ' 
-        ' toolTipFilters
-        ' 
         ' 
         ' btnThemeToggle
         ' 
@@ -144,12 +147,56 @@ Partial Class frmSearch
         btnThemeToggle.Text = "☀️"
         btnThemeToggle.UseVisualStyleBackColor = True
         ' 
+        ' fbFiltersPrice
+        ' 
+        fbFiltersPrice.Controls.Add(cbPriceCurrency)
+        fbFiltersPrice.Controls.Add(cbPriceRange)
+        fbFiltersPrice.Controls.Add(cbPriceOperator)
+        fbFiltersPrice.Location = New Point(20, 186)
+        fbFiltersPrice.Name = "fbFiltersPrice"
+        fbFiltersPrice.Size = New Size(229, 56)
+        fbFiltersPrice.TabIndex = 4
+        fbFiltersPrice.TabStop = False
+        fbFiltersPrice.Text = "Price"
+        ' 
+        ' cbPriceCurrency
+        ' 
+        cbPriceCurrency.DropDownStyle = ComboBoxStyle.DropDownList
+        cbPriceCurrency.FormattingEnabled = True
+        cbPriceCurrency.Items.AddRange(New Object() {"USD ($)", "AUD (A$)", "EUR (€)"})
+        cbPriceCurrency.Location = New Point(146, 22)
+        cbPriceCurrency.Name = "cbPriceCurrency"
+        cbPriceCurrency.Size = New Size(77, 23)
+        cbPriceCurrency.TabIndex = 2
+        cbPriceCurrency.SelectedIndex = 0
+        ' 
+        ' cbPriceRange
+        ' 
+        cbPriceRange.FormattingEnabled = True
+        cbPriceRange.Items.AddRange(New Object() {"", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"})
+        cbPriceRange.Location = New Point(76, 22)
+        cbPriceRange.Name = "cbPriceRange"
+        cbPriceRange.Size = New Size(64, 23)
+        cbPriceRange.TabIndex = 1
+        ' 
+        ' cbPriceOperator
+        ' 
+        cbPriceOperator.DropDownStyle = ComboBoxStyle.DropDownList
+        cbPriceOperator.FormattingEnabled = True
+        cbPriceOperator.Items.AddRange(New Object() {"", ">", "<", "="})
+        cbPriceOperator.Location = New Point(6, 22)
+        cbPriceOperator.Name = "cbPriceOperator"
+        cbPriceOperator.Size = New Size(64, 23)
+        cbPriceOperator.TabIndex = 0
+        cbPriceOperator.SelectedIndex = 1
+        ' 
         ' frmSearch
         ' 
+        AcceptButton = btnSearch
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control
-        ClientSize = New Size(610, 320)
+        ClientSize = New Size(610, 375)
         Controls.Add(btnThemeToggle)
         Controls.Add(gbFilters)
         Controls.Add(Label1)
@@ -163,6 +210,7 @@ Partial Class frmSearch
         Name = "frmSearch"
         Text = "DenuvoWatch - Search"
         gbFilters.ResumeLayout(False)
+        fbFiltersPrice.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
 
@@ -178,4 +226,8 @@ Partial Class frmSearch
     Friend WithEvents gbFilters As GroupBox
     Friend WithEvents toolTipFilters As System.Windows.Forms.ToolTip
     Friend WithEvents btnThemeToggle As Button
+    Friend WithEvents fbFiltersPrice As GroupBox
+    Friend WithEvents cbPriceOperator As ComboBox
+    Friend WithEvents cbPriceRange As ComboBox
+    Friend WithEvents cbPriceCurrency As ComboBox
 End Class
