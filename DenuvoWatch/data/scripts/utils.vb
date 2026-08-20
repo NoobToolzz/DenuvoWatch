@@ -6,20 +6,20 @@ Imports System.Runtime.InteropServices
 ' Moving between forms, starting/stopping the server, styling buttons, and theming.
 ' =============================================================================
 Module Utils
-    ' Theme state — default to light
+    ' Theme state - default to light
     Public IsDarkTheme As Boolean = False
 
-    ' Dark theme palette — softer dark grey, not near-black
+    ' Dark theme palette - softer dark grey, not near-black
     Public ReadOnly DarkBg As Color = ColorTranslator.FromHtml("#2b2b33")
     Public ReadOnly DarkSurface As Color = ColorTranslator.FromHtml("#393941")
     Public ReadOnly DarkBorder As Color = ColorTranslator.FromHtml("#4a4a55")
     Public ReadOnly DarkText As Color = ColorTranslator.FromHtml("#dcdce0")
 
-    <DllImport("uxtheme.dll", CharSet:=CharSet.Unicode, SetLastError:=True)>
+    <DllImport("uxtheme.dll", CharSet := CharSet.Unicode, SetLastError := True)>
     Private Function SetWindowTheme(hwnd As IntPtr, pszSubAppName As String, pszSubIdList As String) As Integer
     End Function
 
-    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    <DllImport("user32.dll", CharSet := CharSet.Auto)>
     Private Function SendMessage(hWnd As IntPtr, msg As Integer, wParam As IntPtr, lParam As IntPtr) As IntPtr
     End Function
 
