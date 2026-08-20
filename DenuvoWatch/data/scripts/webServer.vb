@@ -14,7 +14,7 @@ Public Module WebServer
     Private ReadOnly jsonOpts As New JsonSerializerOptions With {
         .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         .WriteIndented = False
-    }
+        }
 
     ' Set up the web server on localhost only
     Friend Function CreateWebApp() As WebApplication
@@ -47,7 +47,11 @@ Public Module WebServer
             Dim developer = ctx.Request.Query("developer").ToString()
             Dim publisher = ctx.Request.Query("publisher").ToString()
             Dim sceneGroup = ctx.Request.Query("scene_group").ToString()
-            games = FilterGames(query, developer, publisher, sceneGroup)
+            Dim priceOperator = ctx.Request.Query("price_operator").ToString()
+            Dim priceValue = ctx.Request.Query("price_value").ToString()
+            Dim priceCurrency = ctx.Request.Query("price_currency").ToString()
+            games = FilterGames(query, developer, publisher, sceneGroup,
+                                priceOperator, priceValue, priceCurrency)
         End If
 
         Dim resultObj = New With {.games = games}

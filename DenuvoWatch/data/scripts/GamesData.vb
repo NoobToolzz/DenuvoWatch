@@ -24,11 +24,11 @@ Public Module GamesData
             Dim json = client.GetStringAsync(GamesJsonUrl).Result
 
             Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True,
-                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            }
+                    .PropertyNameCaseInsensitive = True,
+                    .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                    }
 
-            Dim root = JsonSerializer.Deserialize(Of GamesRoot)(json, options)
+            Dim root = JsonSerializer.Deserialize (Of GamesRoot)(json, options)
             AllGames = If(root?.Games, New List(Of GameItem)())
 
             Console.WriteLine($"Loaded {AllGames.Count} games")
@@ -70,7 +70,9 @@ Public Module GamesData
     ' Fuzzy text search + comma-separated filters. Strips special chars so
     ' "resident evil 4" matches "Resident Evil: 4".
     Public Function FilterGames(search As String, developers As String,
-        publishers As String, sceneGroups As String) As List(Of GameItem)
+                                publishers As String, sceneGroups As String,
+                                priceOperator As String, priceValue As String, priceCurrency As String) _
+        As List(Of GameItem)
         Dim result = AllGames.AsEnumerable()
 
         If Not String.IsNullOrWhiteSpace(search) Then
@@ -103,6 +105,27 @@ Public Module GamesData
                     Function(s) String.Equals(g.CrackInfo?.SceneGroup, s, StringComparison.OrdinalIgnoreCase)))
         End If
 
+        If Not String.IsNullOrWhiteSpace(priceCurrency) AndAlso
+           Not String.IsNullOrWhiteSpace(priceOperator) Then
+            Dim threshold As Decimal = 0
+            Dim hasValue = Decimal.TryParse(priceValue, threshold)
+            If hasValue AndAlso threshold > 0 Then
+                Dim currencyCode = ExtractCurrencyCode(priceCurrency)
+                result = result.Where(Function(g)
+                    Dim priceStr = GetPriceForCurrency(g, currencyCode)
+                    If String.IsNullOrWhiteSpace(priceStr) Then Return False
+                    Dim gamePrice As Decimal = 0
+                    If Not Decimal.TryParse(priceStr, gamePrice) Then Return False
+                    Select Case priceOperator
+                        Case ">" : Return gamePrice > threshold
+                        Case "<" : Return gamePrice < threshold
+                        Case "=" : Return gamePrice = threshold
+                        Case Else : Return True
+                    End Select
+                End Function)
+            End If
+        End If
+
         Return result.ToList()
     End Function
 
@@ -121,6 +144,35 @@ Public Module GamesData
             If Char.IsLetterOrDigit(c) OrElse c = " "c Then sb.Append(c)
         Next
         Return Regex.Replace(sb.ToString(), "\s+", " ").Trim()
+    End Function
+
+    ' Pull "USD" out of a display string like "USD ($)"
+    Public Function ExtractCurrencyCode(display As String) As String
+        If String.IsNullOrWhiteSpace(display) Then Return ""
+        Dim idx = display.IndexOf("("c)
+        If idx > 0 Then Return display.Substring(0, idx).Trim()
+        Return display.Trim()
+    End Function
+
+    ' Currency symbol for display
+    Public Function GetCurrencySymbol(code As String) As String
+        Select Case code.ToUpperInvariant()
+            Case "USD" : Return "$"
+            Case "AUD" : Return "A$"
+            Case "EUR" : Return "€"
+            Case Else : Return ""
+        End Select
+    End Function
+
+    ' Get the price string for a given currency code from a game
+    Public Function GetPriceForCurrency(g As GameItem, currencyCode As String) As String
+        If g.GameInfo?.Prices Is Nothing Then Return Nothing
+        Select Case currencyCode.ToUpperInvariant()
+            Case "USD" : Return g.GameInfo.Prices.USD
+            Case "AUD" : Return g.GameInfo.Prices.AUD
+            Case "EUR" : Return g.GameInfo.Prices.EUR
+            Case Else : Return Nothing
+        End Select
     End Function
 End Module
 
@@ -160,6 +212,20 @@ Public Class GameInfo
 
     <JsonPropertyName("release_date")>
     Public Property ReleaseDate As String
+
+    <JsonPropertyName("prices")>
+    Public Property Prices As GamePrices
+End Class
+
+Public Class GamePrices
+    <JsonPropertyName("USD")>
+    Public Property USD As String
+
+    <JsonPropertyName("AUD")>
+    Public Property AUD As String
+
+    <JsonPropertyName("EUR")>
+    Public Property EUR As String
 End Class
 
 Public Class CrackInfo
@@ -174,4 +240,14 @@ Public Class CrackInfo
 
     <JsonPropertyName("scene_group")>
     Public Property SceneGroup As String
+End Class
+
+Public Class SearchFilterState
+    Public Property Query As String
+    Public Property Developers As String
+    Public Property Publishers As String
+    Public Property SceneGroups As String
+    Public Property PriceOperator As String
+    Public Property PriceRange As String
+    Public Property PriceCurrency As String
 End Class
