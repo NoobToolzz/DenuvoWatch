@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Globalization
 Imports System.IO
 Imports System.Text
 Imports System.Text.Json
@@ -15,6 +16,9 @@ Public Class frmResults
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property SearchFilters As String
 
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Property FilterState As SearchFilterState
+
     Private games As List(Of GameItem)
     ' Full unfiltered list so I can re-filter when the search bar changes
     Private allGames As List(Of GameItem)
@@ -30,7 +34,7 @@ Public Class frmResults
         {"Cracked", Color.Green},
         {"Hypervisor", Color.Goldenrod},
         {"Uncracked", Color.Red}
-    }
+        }
 
     ' Parse the JSON, fill the list, set the title
     Private Sub frmResults_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -38,11 +42,11 @@ Public Class frmResults
         ApplyTheme(Me)
 
         Dim options As New JsonSerializerOptions With {
-            .PropertyNameCaseInsensitive = True,
-            .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-        }
+                .PropertyNameCaseInsensitive = True,
+                .PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                }
 
-        Dim root = JsonSerializer.Deserialize(Of GamesRoot)(ResultsJson, options)
+        Dim root = JsonSerializer.Deserialize (Of GamesRoot)(ResultsJson, options)
         games = If(root?.Games, New List(Of GameItem)())
         allGames = games.ToList()
 
@@ -162,16 +166,16 @@ Public Class frmResults
             Using headerFont As New Font(lbGames.Font.FontFamily, lbGames.Font.Size + 2, FontStyle.Bold),
                 brush As New SolidBrush(drawColor)
                 Dim sf As New StringFormat With {
-                    .Alignment = StringAlignment.Center,
-                    .LineAlignment = StringAlignment.Center
-                }
+                        .Alignment = StringAlignment.Center,
+                        .LineAlignment = StringAlignment.Center
+                        }
                 e.Graphics.DrawString(headerText, headerFont, brush, e.Bounds, sf)
             End Using
         Else
             ' Draw a normal game title
             Dim text = lbGames.Items(e.Index).ToString()
             Dim textColor =
-                If(isSelected, SystemColors.HighlightText, If(IsDarkTheme, DarkText, SystemColors.ControlText))
+                    If(isSelected, SystemColors.HighlightText, If(IsDarkTheme, DarkText, SystemColors.ControlText))
             TextRenderer.DrawText(e.Graphics, text, lbGames.Font, e.Bounds, textColor,
                                   TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
         End If
@@ -214,6 +218,7 @@ Public Class frmResults
         txtSceneGroup.Text = If(Not String.IsNullOrWhiteSpace(g.CrackInfo?.SceneGroup),
                                 g.CrackInfo.SceneGroup, "—")
 
+        CalculateEstimatedRevenueLost(g)
         LoadCover(g.SortTitle)
     End Sub
 
@@ -235,6 +240,8 @@ Public Class frmResults
         txtCrackStatus.Text = "—"
         txtCrackDate.Text = "—"
         txtSceneGroup.Text = "—"
+        txtEstimatedRevenueLost.Text = "—"
+        txtEstimatedRevenueLost.ForeColor = If(IsDarkTheme, DarkText, SystemColors.ControlText)
         picGameCover.Image = Nothing
     End Sub
 
@@ -258,6 +265,99 @@ Public Class frmResults
             txtCrackStatus.ForeColor = SystemColors.ControlText
         End If
     End Sub
+
+    ' Estimated base number of pirated copies for a Denuvo-protected game
+    Private Const EstimatedPiratedCopies As Integer = 100000
+
+    ' Revenue lost thresholds for colour coding
+    Private Const RevenueRedThreshold As Decimal = 5000000D
+    Private Const RevenueYellowThreshold As Decimal = 1000000D
+
+    ' Estimate revenue lost to piracy based on price, time-to-crack, and currency
+    Private Sub CalculateEstimatedRevenueLost(g As GameItem)
+        Dim currencyCode = SelectedCurrencyCode
+        Dim priceStr = GetPriceForCurrency(g, currencyCode)
+
+        If String.IsNullOrWhiteSpace(priceStr) Then
+            txtEstimatedRevenueLost.Text = "N/A"
+            txtEstimatedRevenueLost.ForeColor = If(IsDarkTheme, DarkText, SystemColors.ControlText)
+            Return
+        End If
+
+        Dim price As Decimal = 0
+        If Not Decimal.TryParse(priceStr, price) Then
+            txtEstimatedRevenueLost.Text = "N/A"
+            txtEstimatedRevenueLost.ForeColor = If(IsDarkTheme, DarkText, SystemColors.ControlText)
+            Return
+        End If
+
+        Dim crackDate = ParseDate(g.CrackInfo?.CrackDate)
+        Dim releaseDate = ParseDate(g.GameInfo?.ReleaseDate)
+
+        If crackDate Is Nothing OrElse releaseDate Is Nothing Then
+            txtEstimatedRevenueLost.Text = "N/A"
+            txtEstimatedRevenueLost.ForeColor = If(IsDarkTheme, DarkText, SystemColors.ControlText)
+            Return
+        End If
+
+        Dim multiplier = GetTimeToCrackMultiplier(releaseDate.Value, crackDate.Value)
+        Dim revenueLost = price*EstimatedPiratedCopies*multiplier
+        Dim symbol = GetCurrencySymbol(currencyCode)
+
+        txtEstimatedRevenueLost.Text = $"{symbol}{revenueLost:N0}"
+
+        If revenueLost >= RevenueRedThreshold Then
+            txtEstimatedRevenueLost.ForeColor = Color.Red
+        ElseIf revenueLost >= RevenueYellowThreshold Then
+            txtEstimatedRevenueLost.ForeColor = Color.Goldenrod
+        Else
+            txtEstimatedRevenueLost.ForeColor = If(IsDarkTheme, DarkText, SystemColors.ControlText)
+        End If
+    End Sub
+
+    ' Multiplier based on how quickly the game was cracked after release.
+    ' <1 month = highest, then slightly lower every 3 months, >1 year = lowest.
+    Private Function GetTimeToCrackMultiplier(releaseDate As DateTime, crackDate As DateTime) As Decimal
+        If crackDate < releaseDate Then Return 1.0D
+
+        Dim days = (crackDate - releaseDate).Days
+
+        If days < 30 Then Return 1.0D
+        If days < 90 Then Return 0.95D
+        If days < 180 Then Return 0.9D
+        If days < 270 Then Return 0.85D
+        If days < 365 Then Return 0.8D
+        Return 0.5D
+    End Function
+
+    ' Parse a date string in "MMM dd, yyyy" format, falling back to a 4-digit year or general parse
+    Private Function ParseDate(s As String) As DateTime?
+        If String.IsNullOrWhiteSpace(s) Then Return Nothing
+        Dim result As DateTime
+        If DateTime.TryParseExact(s, "MMM dd, yyyy", CultureInfo.InvariantCulture,
+                                  DateTimeStyles.None, result) Then
+            Return result
+        End If
+        Dim year As Integer
+        If Integer.TryParse(s, year) AndAlso s.Trim().Length = 4 Then
+            Return New DateTime(year, 1, 1)
+        End If
+        If DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, result) Then
+            Return result
+        End If
+        Return Nothing
+    End Function
+
+    ' Currency code selected in the search form (defaults to USD)
+    Private ReadOnly Property SelectedCurrencyCode As String
+        Get
+            If FilterState IsNot Nothing AndAlso
+               Not String.IsNullOrWhiteSpace(FilterState.PriceCurrency) Then
+                Return ExtractCurrencyCode(FilterState.PriceCurrency)
+            End If
+            Return "USD"
+        End Get
+    End Property
 
     ' Load the cover from the local cache
     Private Sub LoadCover(sortTitle As String)
@@ -295,7 +395,11 @@ Public Class frmResults
     End Sub
 
     Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
-        NavigateTo(Me, Function() New frmSearch())
+        NavigateTo(Me, Function()
+            Dim search As New frmSearch()
+            search.RestoreState = FilterState
+            Return search
+        End Function)
     End Sub
 
     ' Send the data to the export form
@@ -304,6 +408,7 @@ Public Class frmResults
             Dim exportForm As New frmExport()
             exportForm.ResultsJson = ResultsJson
             exportForm.SearchFilters = SearchFilters
+            exportForm.FilterState = FilterState
             Return exportForm
         End Function)
     End Sub
@@ -319,7 +424,8 @@ Public Class frmResults
             Return
         End If
 
-        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") With {.UseShellExecute = True})
+        Process.Start(New ProcessStartInfo($"https://store.steampowered.com/app/{g.GameInfo.AppId}") _
+                         With {.UseShellExecute = True})
     End Sub
 
     Private Sub grpGameInfo_Enter(sender As Object, e As EventArgs) Handles grpGameInfo.Enter
